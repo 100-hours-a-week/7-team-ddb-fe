@@ -3,6 +3,16 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* UI 컴포넌트별 폰트 사이즈 */
+  --font-size-heading-1: 24px;
+  --font-size-heading-2: 20px;
+  --font-size-heading-3: 18px;
+  --font-size-body: 16px;
+  --font-size-caption: 14px;
+  --font-size-button: 16px;
+  --font-size-input: 16px;
+  --font-size-label: 14px;
 }
 
 @theme inline {
@@ -11,15 +21,112 @@
   --font-sans: var(--font-pretendard);
 }
 
-@media (prefers-color-scheme: dark) {
+/* 웹에서 모바일 사이즈로 보여주기 */
+body {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #ffe0e0 0%, #ffd6d6 50%, #ffcccc 100%);
+  background-image:
+    radial-gradient(at 40% 20%, rgba(255, 224, 224, 0.5) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, rgba(255, 214, 214, 0.4) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, rgba(255, 200, 200, 0.4) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, rgba(255, 204, 204, 0.5) 0px, transparent 50%);
+  color: var(--foreground);
+  font-family: var(--font-pretendard), sans-serif, system-ui;
+  display: flex;
+  justify-content: center;
+  font-size: var(--font-size-body);
+}
+
+/* 모바일 컨테이너 */
+.mobile-container {
+  width: 100%;
+  max-width: 375px;
+  min-height: 100vh;
+  background: var(--background);
+  position: relative;
+  overflow-x: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  transition: max-width 0.3s ease-in-out;
+}
+
+/* 태블릿 사이즈 (768px 이상) */
+@media (min-width: 768px) {
+  .mobile-container {
+    max-width: 480px;
+  }
+
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --font-size-heading-1: 28px;
+    --font-size-heading-2: 24px;
+    --font-size-heading-3: 20px;
+    --font-size-body: 18px;
+    --font-size-caption: 16px;
+    --font-size-button: 18px;
+    --font-size-input: 18px;
+    --font-size-label: 16px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-pretendard), sans-serif, system-ui;
+/* 작은 데스크톱 사이즈 (1024px 이상) */
+@media (min-width: 1024px) {
+  .mobile-container {
+    max-width: 520px;
+  }
+
+  :root {
+    --font-size-heading-1: 32px;
+    --font-size-heading-2: 28px;
+    --font-size-heading-3: 24px;
+    --font-size-body: 20px;
+    --font-size-caption: 18px;
+    --font-size-button: 20px;
+    --font-size-input: 20px;
+    --font-size-label: 18px;
+  }
+}
+
+/* UI 컴포넌트 클래스 */
+.heading-1 {
+  font-size: var(--font-size-heading-1);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.heading-2 {
+  font-size: var(--font-size-heading-2);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.heading-3 {
+  font-size: var(--font-size-heading-3);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.body-text {
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+}
+
+.caption {
+  font-size: var(--font-size-caption);
+  line-height: 1.4;
+}
+
+.button-text {
+  font-size: var(--font-size-button);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.input-text {
+  font-size: var(--font-size-input);
+  line-height: 1.5;
+}
+
+.label-text {
+  font-size: var(--font-size-label);
+  line-height: 1.4;
 }
