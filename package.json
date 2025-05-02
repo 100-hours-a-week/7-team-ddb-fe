@@ -42,6 +42,7 @@
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.0.0",
     "husky": "^9.1.7",
+    "kakao.maps.d.ts": "^0.1.40",
     "lint-staged": "^15.5.1",
     "prettier": "3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
