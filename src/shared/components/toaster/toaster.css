@@ -1,0 +1,23 @@
+.toast-custom {
+  position: relative;
+  overflow: hidden;
+}
+
+.toast-custom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: #cdcdcd;
+  animation: progress 1s linear forwards;
+}
+
+@keyframes progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
