@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 
-import { pretendard } from '@/shared';
+import { Toaster } from '@/shared/components';
+import { pretendard } from '@/shared/fonts';
+
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -22,8 +24,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pretendard.variable}`}>
-        <div className="mobile-container">
-          <main className="min-h-screen w-full">{children}</main>
+        <div className="mobile-container relative">
+          <main className="min-h-screen w-full">
+            {children}
+            <Toaster />
+          </main>
         </div>
       </body>
     </html>
