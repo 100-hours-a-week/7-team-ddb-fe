@@ -7,14 +7,14 @@
   --font-sans: 'Pretendard', sans-serif, system-ui;
 
   /* UI 컴포넌트별 폰트 사이즈 */
-  --font-size-heading-1: 24px;
-  --font-size-heading-2: 20px;
-  --font-size-heading-3: 18px;
-  --font-size-body: 16px;
-  --font-size-caption: 14px;
-  --font-size-button: 16px;
-  --font-size-input: 16px;
-  --font-size-label: 14px;
+  --font-size-heading-1: 22px;
+  --font-size-heading-2: 18px;
+  --font-size-heading-3: 16px;
+  --font-size-body: 14px;
+  --font-size-caption: 12px;
+  --font-size-button: 14px;
+  --font-size-input: 14px;
+  --font-size-label: 12px;
 
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -120,6 +120,14 @@ body {
 .label-text {
   font-size: var(--font-size-label);
   line-height: 1.4;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 @theme inline {
