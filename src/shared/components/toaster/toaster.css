@@ -10,7 +10,7 @@
   left: 0;
   height: 3px;
   background: #cdcdcd;
-  animation: progress 1s linear forwards;
+  animation: progress 1.5s linear forwards;
 }
 
 @keyframes progress {
