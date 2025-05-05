@@ -31,12 +31,10 @@ export function Map() {
   }, []);
 
   return (
-    <div className="relative h-full w-full">
-      <div
-        id="map"
-        className="absolute inset-0 h-full w-full"
-        style={{ minHeight: '100vh' }}
-      />
-    </div>
+    <div
+      id="map"
+      className="absolute inset-0 z-0 h-full w-full"
+      style={{ minHeight: '100vh' }}
+    />
   );
 }
