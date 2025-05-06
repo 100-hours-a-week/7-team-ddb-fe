@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 
-import { Toaster } from '@/shared/components';
-import { pretendard } from '@/shared/fonts';
-
-import './globals.css';
+import { BottomNavigation } from '@/shared/components';
 
 export const metadata: Metadata = {
   title: 'Dolpin | AI 기반 맞춤 장소 추천',
@@ -16,21 +13,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${pretendard.variable}`}>
-        <div className="mobile-container relative">
-          <main className="min-h-screen w-full">
-            {children}
-            <Toaster />
-          </main>
-        </div>
-      </body>
-    </html>
+    <>
+      {children}
+      <BottomNavigation />
+    </>
   );
 }

@@ -1,9 +1,9 @@
 import js from '@eslint/js';
+import { defineConfig } from 'eslint/config';
+import pluginImport from 'eslint-plugin-import';
+import pluginReact from 'eslint-plugin-react';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import pluginReact from 'eslint-plugin-react';
-import pluginImport from 'eslint-plugin-import';
-import { defineConfig } from 'eslint/config';
 
 export default defineConfig([
   {
