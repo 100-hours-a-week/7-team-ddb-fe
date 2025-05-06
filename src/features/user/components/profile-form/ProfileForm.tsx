@@ -16,10 +16,46 @@ import {
   Textarea,
 } from '@/shared/components';
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_IMAGE_TYPES = [
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+];
+
 const profileSchema = z.object({
-  profileImage: z.string().optional(),
-  nickname: z.string().min(2, '2자 이상 입력해주세요').max(20),
-  introduction: z.string().max(100).optional(),
+  profileImage: z
+    .string()
+    .optional()
+    .refine(
+      (file) => {
+        if (!file) return true;
+        const base64Data = file.split(',')[1];
+        const binaryData = atob(base64Data);
+        return binaryData.length <= MAX_FILE_SIZE;
+      },
+      {
+        message: '프로필 사진은 5MB 이하만 가능합니다.',
+      },
+    )
+    .refine(
+      (file) => {
+        if (!file) return true;
+        const mimeType = file.split(';')[0].split(':')[1];
+        return ACCEPTED_IMAGE_TYPES.includes(mimeType);
+      },
+      {
+        message: '프로필 사진은 .jpg, .jpeg, .png, .webp 확장자만 가능합니다.',
+      },
+    ),
+  nickname: z
+    .string()
+    .min(2, '2자 이상 입력해주세요')
+    .max(10)
+    .regex(/^[가-힣a-zA-Z0-9\s]+$/, '특수문자는 사용할 수 없습니다')
+    .trim(),
+  introduction: z.string().max(70).optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -86,7 +122,7 @@ export function ProfileForm({
           <input
             ref={inputRef}
             type="file"
-            accept="image/*"
+            accept=".jpg,.jpeg,.png,.webp"
             className="hidden"
             onChange={handleImageChange}
           />
