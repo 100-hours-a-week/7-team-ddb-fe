@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import { initializeMap } from '../../utils';
 
-import { loadKakaoMapScript } from '@/shared/lib';
+import { loadKakaoMapScript } from '@/shared/lib/map';
 
 export function Map() {
   useEffect(() => {
