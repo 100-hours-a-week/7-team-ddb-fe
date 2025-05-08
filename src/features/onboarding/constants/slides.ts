@@ -14,7 +14,7 @@ export const slides = [
   {
     imageUrl: '/images/onboarding/slide3.png',
     title: '검색하는 단어에도 의미를 담아',
-    description: '당신이 원하는 장소, 지금 가장 어울리는 공간을 \n 찾아드려요.',
+    description: '당신이 원하는 장소,\n  지금 가장 어울리는공간을  찾아드려요.',
   },
   {
     imageUrl: '/images/onboarding/slide3.png',
