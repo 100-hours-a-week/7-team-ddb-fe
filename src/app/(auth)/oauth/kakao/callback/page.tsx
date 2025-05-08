@@ -1,41 +1,53 @@
-import { redirect } from 'next/navigation';
+'use client';
+
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 import { issueAuthTokens } from '@/features/user';
 
-interface KakaoCallbackPageProps {
-  searchParams: {
-    code?: string;
-    error?: string;
-    error_description?: string;
-  };
-}
+export default function KakaoCallbackPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const code = searchParams.get('code');
+  const error = searchParams.get('error');
+  const error_description = searchParams.get('error_description');
 
-export default async function KakaoCallbackPage({
-  searchParams,
-}: KakaoCallbackPageProps) {
-  const { code, error, error_description } = searchParams;
+  useEffect(() => {
+    async function handleCallback() {
+      if (error) {
+        console.error(`Kakao OAuth Error: ${error} - ${error_description}`);
+        router.push('/onboarding');
+        return;
+      }
 
-  console.log('callback page');
+      if (!code) {
+        console.error('Kakao OAuth: Authorization code not found in callback.');
+        router.push('/onboarding');
+        return;
+      }
 
-  if (error) {
-    console.error(`Kakao OAuth Error: ${error} - ${error_description}`);
-    redirect('/onboarding');
-  }
+      try {
+        const response = await issueAuthTokens({ authorizationCode: code });
 
-  if (!code) {
-    console.error('Kakao OAuth: Authorization code not found in callback.');
-    redirect('/onboarding');
-  }
+        if (!response || !response.user) {
+          console.error('issueAuthTokens 응답에 user 객체 없음', response);
+          router.push('/onboarding');
+          return;
+        }
 
-  const response = await issueAuthTokens({ authorizationCode: code });
+        if (!response.user.profileCompleted) {
+          router.push('/auth/consent');
+        } else {
+          router.push('/');
+        }
+      } catch (err) {
+        console.error('Failed to issue auth tokens:', err);
+        router.push('/onboarding');
+      }
+    }
 
-  console.log('response', response);
-
-  if (!response.user.profileCompleted) {
-    redirect('/auth/consent');
-  } else {
-    redirect('/');
-  }
+    handleCallback();
+  }, [code, error, error_description, router]);
 
   return (
     <div
