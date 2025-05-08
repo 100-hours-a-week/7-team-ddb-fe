@@ -49,7 +49,7 @@ const profileSchema = z.object({
         message: '프로필 사진은 .jpg, .jpeg, .png, .webp 확장자만 가능합니다.',
       },
     ),
-  nickname: z
+  username: z
     .string()
     .min(2, '2자 이상 입력해주세요')
     .max(10)
@@ -77,7 +77,7 @@ export function ProfileForm({
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      nickname: '',
+      username: '',
       introduction: '',
       ...defaultValues,
     },
@@ -131,7 +131,7 @@ export function ProfileForm({
         </div>
         <FormField
           control={form.control}
-          name="nickname"
+          name="username"
           render={({ field }) => (
             <FormItem className="w-full">
               <FormLabel className="heading-2">닉네임</FormLabel>
