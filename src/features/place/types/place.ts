@@ -1,3 +1,7 @@
+export interface CategoriesResponse {
+  categories: string[];
+}
+
 export interface PlaceDetail {
   id: number;
   name: string;
