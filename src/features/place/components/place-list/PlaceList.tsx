@@ -50,6 +50,7 @@ export function PlaceList() {
                     name={`장소 ${i + 1}`}
                     thumbnail={`https://placehold.co/100x100`}
                     keywords={['키워드1', '키워드2', '키워드3']}
+                    isClickable
                   />
                 </div>
               ))}

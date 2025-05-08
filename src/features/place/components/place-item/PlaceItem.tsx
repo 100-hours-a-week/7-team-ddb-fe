@@ -29,7 +29,7 @@ export function PlaceItem({
   return (
     <div className="flex flex-col">
       <div
-        className="flex gap-4"
+        className={`flex gap-4 ${isClickable ? 'cursor-pointer' : ''}`}
         onClick={isClickable ? handleDetailClick : undefined}
       >
         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg">
