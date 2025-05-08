@@ -1,15 +1,20 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+
+import { deleteUser } from '../../api';
 
 import { Button } from '@/shared/components';
 
 export function DeleteAccountForm() {
+  const router = useRouter();
+
   const [isAgreed, setIsAgreed] = useState(false);
 
-  const handleDelete = () => {
-    // TODO: 회원 탈퇴 API 연동
-    console.log('회원 탈퇴');
+  const handleDelete = async () => {
+    await deleteUser();
+    router.push('/onboarding');
   };
 
   return (
