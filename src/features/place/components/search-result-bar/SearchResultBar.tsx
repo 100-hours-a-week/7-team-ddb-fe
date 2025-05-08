@@ -7,7 +7,8 @@ import { useSearchBar } from '../../hooks/useSearchBar';
 
 export function SearchResultBar() {
   const searchParams = useSearchParams();
-  const initialQuery = searchParams.get('q') || '';
+  const initialQuery =
+    searchParams.get('query') || searchParams.get('category') || '';
   const router = useRouter();
   const { searchQuery, validateSearch, handleInputChange } =
     useSearchBar(initialQuery);
