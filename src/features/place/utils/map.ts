@@ -2,14 +2,13 @@ const RADIUS_OFFSET = 0.005; // 약 1km
 export const MIN_LEVEL = 1;
 export const MAX_LEVEL = 3;
 
-// TODO: 기본 위치 설정 (판교 유스페이스로 변경해야함)
-const DEFAULT_LAT = 37.5665;
-const DEFAULT_LNG = 126.978;
+export const DEFAULT_LATITUDE = 37.400271334747096;
+export const DEFAULT_LONGITUDE = 127.10698765491078;
 
 export function initializeMap(
   mapContainer: HTMLElement,
-  lat: number = DEFAULT_LAT,
-  lng: number = DEFAULT_LNG,
+  lat: number = DEFAULT_LATITUDE,
+  lng: number = DEFAULT_LONGITUDE,
   onOutOfBounds?: (
     map: kakao.maps.Map,
     latLng: kakao.maps.LatLng,
@@ -72,8 +71,15 @@ function createUserLocationMarker(
   const latLng = new window.kakao.maps.LatLng(lat, lng);
   const imageSrc = '/img/user-location.png';
   const imageSize = new window.kakao.maps.Size(40, 40);
+  const imageOptions = {
+    offset: new window.kakao.maps.Point(0, 0),
+  };
 
-  const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+  const markerImage = new window.kakao.maps.MarkerImage(
+    imageSrc,
+    imageSize,
+    imageOptions,
+  );
 
   const marker = new window.kakao.maps.Marker({
     position: latLng,
