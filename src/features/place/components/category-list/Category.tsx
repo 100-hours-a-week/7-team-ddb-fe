@@ -2,11 +2,15 @@
 
 import { useRouter } from 'next/navigation';
 
+import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '../../constants';
+
 export function Category({ category }: { category: string }) {
   const router = useRouter();
 
   const handleClick = (category: string) => {
-    router.push(`/search?category=${category}`);
+    router.push(
+      `/search?category=${category}&lat=${DEFAULT_LATITUDE}&lng=${DEFAULT_LONGITUDE}`,
+    );
   };
 
   return (
