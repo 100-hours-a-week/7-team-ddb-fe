@@ -2,6 +2,21 @@ export interface CategoriesResponse {
   categories: string[];
 }
 
+interface Location {
+  type: 'Point';
+  coordinates: [number, number]; // 경도, 위도 순서 (GeoJSON 표준)
+}
+
+export interface Place {
+  id: number;
+  name: string;
+  thumbnail: string;
+  distance: string; // API 응답이 문자열일 수 있음
+  moment_count: string; // API 응답이 문자열일 수 있음
+  keywords: string[];
+  location: Location;
+}
+
 export interface PlaceDetail {
   id: number;
   name: string;
