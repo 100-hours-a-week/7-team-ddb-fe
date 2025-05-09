@@ -5,19 +5,19 @@ import { useRouter } from 'next/navigation';
 import { KeywordList } from '../keyword-list';
 
 export interface PlaceItemProps {
-  id?: number;
-  name?: string;
-  thumbnail?: string;
-  keywords?: string[];
+  id: number;
+  name: string;
+  thumbnail: string;
+  keywords: string[];
   isClickable?: boolean;
   isDetailButton?: boolean;
 }
 
 export function PlaceItem({
-  id = 1,
-  name = '경복궁',
-  thumbnail = 'https://images.unsplash.com/photo-1575936123452-b67c3203c357',
-  keywords = ['유물', '조용한', '한적한'],
+  id,
+  name,
+  thumbnail,
+  keywords,
   isClickable,
   isDetailButton,
 }: PlaceItemProps) {

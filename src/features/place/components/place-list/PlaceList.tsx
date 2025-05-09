@@ -3,9 +3,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { Drawer } from 'vaul';
 
+import { Place } from '../../types';
 import { PlaceItem } from '../place-item';
 
-export function PlaceList() {
+export interface PlaceListProps {
+  places: Place[];
+}
+
+export function PlaceList({ places }: PlaceListProps) {
   const snapPoints = ['200px', '355px', 1];
   const minSnap = snapPoints[0];
 
@@ -42,14 +47,14 @@ export function PlaceList() {
           </Drawer.Description>
           <div className="my-10 flex-1 overflow-y-auto px-4 pb-10">
             <div className="space-y-8">
-              {Array.from({ length: 20 }).map((_, i) => (
-                <div key={i} className="border-b border-zinc-200 pb-8">
+              {places.map((place) => (
+                <div key={place.id} className="border-b border-zinc-200 pb-8">
                   <PlaceItem
-                    key={i}
-                    id={i}
-                    name={`장소 ${i + 1}`}
-                    thumbnail={`https://placehold.co/100x100`}
-                    keywords={['키워드1', '키워드2', '키워드3']}
+                    key={place.id}
+                    id={place.id}
+                    name={place.name}
+                    thumbnail={place.thumbnail}
+                    keywords={place.keywords}
                     isClickable
                   />
                 </div>
