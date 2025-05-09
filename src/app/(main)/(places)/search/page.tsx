@@ -1,56 +1,63 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 import {
   Map,
-  PlaceBottomSheet,
+  Place,
   PlaceList,
+  searchPlaces,
   SearchResultBar,
 } from '@/features/place';
 
 export default function SearchPage() {
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
-  // const query = searchParams.get('query');
-  // const lat = searchParams.get('lat');
-  // const lng = searchParams.get('lng');
-  // const category = searchParams.get('category');
+  const searchParams = useSearchParams();
+  const query = searchParams.get('query');
+  const lat = searchParams.get('lat');
+  const lng = searchParams.get('lng');
+  const category = searchParams.get('category');
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [places, setPlaces] = useState<Place[]>([]);
 
-  //const [places, setPlaces] = useState<Place[]>([]);
-  // const [selectedPlaceId, setSelectedPlaceId] = useState<number | null>(null);
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      const currentLat = lat || undefined;
+      const currentLng = lng || undefined;
+      const currentQuery = query || null;
+      const currentCategory = category || null;
 
-  // const handleMarkerClick = (placeId: number) => {
-  //   setSelectedPlaceId((prevId) => (prevId === placeId ? null : placeId)); // 선택 토글
-  // };
+      if (currentLat && currentLng) {
+        try {
+          const result = await searchPlaces({
+            query: currentQuery,
+            lat: currentLat,
+            lng: currentLng,
+            category: currentCategory,
+          });
+          console.log('장소 검색 결과:', result.places);
+          setPlaces(result.places || []);
+        } catch (error) {
+          console.error('장소 검색 API 호출 중 오류:', error);
+          setPlaces([]);
+        }
+      } else {
+        console.log('위치 정보(lat, lng)가 없어 장소를 검색할 수 없습니다.');
+      }
+    };
+
+    fetchPlaces();
+  }, [query, lat, lng, category]);
 
   return (
     <div className="relative h-full w-full">
-      <Map
-      // places={places}
-      // selectedPlaceId={selectedPlaceId}
-      // onMarkerClick={handleMarkerClick}
-      />
+      <Map places={places} />
       <div className="absolute top-0 left-0 z-10 flex w-full flex-col gap-5">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div>Loading SearchBar...</div>}>
           <SearchResultBar />
         </Suspense>
-        <button
-          onClick={() => {
-            setIsOpen((prev) => !prev);
-          }}
-        >
-          <img
-            src="/img/pin-select.png"
-            alt="pin"
-            className="mt-32 ml-28 h-15 w-15 cursor-pointer"
-          />
-        </button>
       </div>
-      <PlaceList />
-      <PlaceBottomSheet isOpen={isOpen} onOpenChange={setIsOpen} />
+      <PlaceList places={places} />
     </div>
   );
 }
