@@ -26,7 +26,7 @@ export function PlaceOpenHours({ openHours }: PlaceOpenHoursProps) {
             {schedule.hours ? (
               <span className="body-text text-gray-800">{schedule.hours}</span>
             ) : (
-              <span className="body-text text-red-500">{schedule.note}</span>
+              <span className="body-text text-red-500">휴무</span>
             )}
           </div>
         ))}
