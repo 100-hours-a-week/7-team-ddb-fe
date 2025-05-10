@@ -1,4 +1,7 @@
+'use client';
+
 import { NavArrowLeft } from 'iconoir-react';
+import { useRouter } from 'next/navigation';
 
 export interface HeaderProps {
   title?: string;
@@ -13,11 +16,20 @@ export function Header({
   onBackClick,
   rightElement,
 }: HeaderProps) {
+  const router = useRouter();
+
+  const handleBackClick = () => {
+    if (onBackClick) {
+      onBackClick();
+    } else {
+      router.back();
+    }
+  };
   return (
     <header className="flex h-16 items-center justify-between border-b border-b-gray-200 px-4">
       <div className="flex items-center">
         {showBackButton && (
-          <button onClick={onBackClick} className="flex items-center gap-2">
+          <button onClick={handleBackClick} className="flex items-center gap-2">
             <NavArrowLeft className="h-6 w-6" />
           </button>
         )}
