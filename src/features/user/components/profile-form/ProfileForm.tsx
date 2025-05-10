@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -15,8 +15,9 @@ import {
   Input,
   Textarea,
 } from '@/shared/components';
+import { useImageUpload } from '@/shared/hooks';
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
   'image/jpg',
@@ -25,30 +26,7 @@ const ACCEPTED_IMAGE_TYPES = [
 ];
 
 const profileSchema = z.object({
-  profile_image: z
-    .string()
-    .optional()
-    .refine(
-      (file) => {
-        if (!file) return true;
-        const base64Data = file.split(',')[1];
-        const binaryData = atob(base64Data);
-        return binaryData.length <= MAX_FILE_SIZE;
-      },
-      {
-        message: '프로필 사진은 5MB 이하만 가능합니다.',
-      },
-    )
-    .refine(
-      (file) => {
-        if (!file) return true;
-        const mimeType = file.split(';')[0].split(':')[1];
-        return ACCEPTED_IMAGE_TYPES.includes(mimeType);
-      },
-      {
-        message: '프로필 사진은 .jpg, .jpeg, .png, .webp 확장자만 가능합니다.',
-      },
-    ),
+  profile_image: z.string().optional(),
   username: z
     .string()
     .min(2, '2자 이상 입력해주세요')
@@ -61,7 +39,7 @@ const profileSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
 export interface ProfileFormProps {
-  onSubmit: (data: ProfileFormValues) => void;
+  onSubmit: (data: ProfileFormValues) => Promise<void>;
   defaultValues?: Partial<ProfileFormValues>;
   buttonText?: string;
 }
@@ -71,64 +49,168 @@ export function ProfileForm({
   defaultValues,
   buttonText = '저장',
 }: ProfileFormProps) {
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(
+    defaultValues?.profile_image || null,
+  );
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
+  const {
+    uploadImage,
+    isLoading: isUploadingImage,
+    error: imageUploadError,
+  } = useImageUpload();
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      username: '',
-      introduction: '',
-      ...defaultValues,
+      username: defaultValues?.username || '',
+      introduction: defaultValues?.introduction || '',
+      profile_image: defaultValues?.profile_image || '',
     },
   });
 
+  useEffect(() => {
+    if (defaultValues?.profile_image) {
+      setPreview(defaultValues.profile_image);
+      setSelectedFile(null);
+      form.setValue('profile_image', defaultValues.profile_image);
+    }
+  }, [defaultValues?.profile_image, form]);
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+    form.clearErrors('profile_image');
+    setImageUploadError(null);
+
     if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        form.setError('profile_image', {
+          type: 'manual',
+          message: `프로필 사진은 ${MAX_FILE_SIZE / 1024 / 1024}MB 이하만 가능합니다.`,
+        });
+        setSelectedFile(null);
+        setPreview(defaultValues?.profile_image || null);
+        return;
+      }
+      if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+        form.setError('profile_image', {
+          type: 'manual',
+          message:
+            '프로필 사진은 .jpg, .jpeg, .png, .webp 확장자만 가능합니다.',
+        });
+        setSelectedFile(null);
+        setPreview(defaultValues?.profile_image || null);
+        return;
+      }
+
+      setSelectedFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        const result = reader.result as string;
-        setPreview(result);
-        form.setValue('profile_image', result);
+        setPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+    } else {
+      setSelectedFile(null);
+      setPreview(defaultValues?.profile_image || null);
     }
   };
+
+  const setImageUploadError = (error: Error | null) => {
+    if (error) {
+      form.setError('profile_image', {
+        type: 'manual',
+        message: error.message || '이미지 업로드 실패',
+      });
+    } else {
+      form.clearErrors('profile_image');
+    }
+  };
+
+  const handleFormSubmit = async (data: ProfileFormValues) => {
+    setIsSubmittingForm(true);
+    setImageUploadError(null);
+
+    let finalProfileImageUrl = data.profile_image;
+
+    if (selectedFile) {
+      const uploadedUrl = await uploadImage(selectedFile, 'profile');
+      if (uploadedUrl) {
+        finalProfileImageUrl = uploadedUrl;
+      } else {
+        if (imageUploadError) {
+          form.setError('profile_image', {
+            type: 'manual',
+            message:
+              imageUploadError.message ||
+              '이미지 업로드 중 문제가 발생했습니다.',
+          });
+        }
+        setIsSubmittingForm(false);
+        return;
+      }
+    }
+
+    try {
+      await onSubmit({ ...data, profile_image: finalProfileImageUrl });
+    } catch (error) {
+      console.error('Form submission error:', error);
+    } finally {
+      setIsSubmittingForm(false);
+    }
+  };
+
+  useEffect(() => {
+    if (imageUploadError && !selectedFile) {
+      setImageUploadError(imageUploadError);
+    }
+  }, [imageUploadError, form, selectedFile]);
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(handleFormSubmit)}
         className="mx-auto flex w-full max-w-sm flex-col items-center space-y-8 py-6"
       >
         <div className="relative">
           <div
-            onClick={() => inputRef.current?.click()}
-            className="h-32 w-32 cursor-pointer overflow-hidden rounded-full border-2 border-gray-300 bg-gray-200"
+            onClick={() => !isSubmittingForm && inputRef.current?.click()}
+            className={`h-32 w-32 overflow-hidden rounded-full border-2 bg-gray-200 ${
+              isSubmittingForm
+                ? 'cursor-not-allowed opacity-70'
+                : 'cursor-pointer'
+            } ${form.formState.errors.profile_image ? 'border-destructive' : 'border-gray-300'}`}
           >
-            {preview || defaultValues?.profile_image ? (
+            {preview ? (
               <img
-                src={
-                  preview || (defaultValues?.profile_image as unknown as string)
-                }
+                src={preview}
                 alt="프로필 이미지"
                 className="h-full w-full object-cover"
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center text-gray-500">
-                사진 선택
+                {isSubmittingForm && isUploadingImage
+                  ? '업로드중...'
+                  : '사진 선택'}
               </div>
             )}
           </div>
           <input
             ref={inputRef}
             type="file"
-            accept=".jpg,.jpeg,.png,.webp"
+            accept={ACCEPTED_IMAGE_TYPES.join(',')}
             className="hidden"
             onChange={handleImageChange}
+            disabled={isSubmittingForm}
           />
         </div>
+        {form.formState.errors.profile_image?.message && (
+          <p className="text-destructive text-sm font-medium">
+            {form.formState.errors.profile_image?.message}
+          </p>
+        )}
+
         <FormField
           control={form.control}
           name="username"
@@ -139,6 +221,7 @@ export function ProfileForm({
                 placeholder="닉네임을 입력하세요"
                 {...field}
                 className="input-text"
+                disabled={isSubmittingForm}
               />
               <FormMessage />
             </FormItem>
@@ -154,6 +237,7 @@ export function ProfileForm({
                 placeholder="간단한 소개를 입력하세요"
                 {...field}
                 className="input-text"
+                disabled={isSubmittingForm}
               />
               <FormMessage />
             </FormItem>
@@ -162,9 +246,13 @@ export function ProfileForm({
         <Button
           type="submit"
           className="h-10 w-full"
-          disabled={form.formState.isSubmitting}
+          disabled={isSubmittingForm}
         >
-          {buttonText}
+          {isSubmittingForm
+            ? isUploadingImage
+              ? '이미지 업로드 중'
+              : '저장 중'
+            : buttonText}
         </Button>
       </form>
     </Form>
