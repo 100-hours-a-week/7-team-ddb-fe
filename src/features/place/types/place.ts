@@ -36,9 +36,8 @@ export interface PlaceDetail {
 export interface OpenHours {
   status: string;
   schedules: {
-    day: string;
+    day: 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
     hours: string | null;
-    note: string | null;
   }[];
 }
 export interface Menu {
@@ -88,37 +87,30 @@ export const mockPlaceDetail: PlaceDetail = {
       {
         day: 'mon',
         hours: '08:00~17:00',
-        note: null,
       },
       {
         day: 'tue',
         hours: '08:00~17:00',
-        note: null,
       },
       {
         day: 'wed',
         hours: '08:00~17:00',
-        note: null,
       },
       {
         day: 'thu',
         hours: '08:00~17:00',
-        note: null,
       },
       {
         day: 'fri',
         hours: '08:00~17:00',
-        note: null,
       },
       {
         day: 'sat',
         hours: null,
-        note: '정기휴무 (매주 토요일)',
       },
       {
         day: 'sun',
         hours: null,
-        note: '정기휴무 (매주 일요일)',
       },
     ],
   },
