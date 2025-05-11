@@ -11,8 +11,8 @@ export interface Place {
   id: number;
   name: string;
   thumbnail: string;
-  distance: string; // API 응답이 문자열일 수 있음
-  moment_count: string; // API 응답이 문자열일 수 있음
+  distance: string;
+  moment_count: string;
   keywords: string[];
   location: Location;
 }
@@ -34,84 +34,20 @@ export interface PlaceDetail {
 }
 
 export interface OpenHours {
-  status: string;
+  status:
+    | '영업 중'
+    | '영업 종료'
+    | '브레이크 타임'
+    | '휴무일'
+    | '영업 정보 없음'
+    | '영업 여부 확인 필요';
   schedules: {
     day: 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
     hours: string | null;
+    break_time: string | null;
   }[];
 }
 export interface Menu {
   name: string;
   price: number;
 }
-
-export const mockPlaceDetail: PlaceDetail = {
-  id: 1,
-  name: '해목 논현점',
-  address: '서울 강남구 선릉로 145길 14',
-  thumbnail:
-    'https://images.unsplash.com/photo-1563245372-f21724e3856d?q=80&w=1000&auto=format&fit=crop',
-  location: {
-    coordinates: [126.9804, 37.5231],
-    type: 'Point',
-  },
-  keywords: ['포장', '주차', '밀실'],
-  description:
-    '다양한 맛과 특별한 장어의 만남. 다양한 맛과 특별한 장어의 만남. 다양한 맛과 특별한 장어의 만남. 다양한 맛과 특별한 장어의 만남.',
-  phone: '0507-0505-0607',
-  menu: [
-    {
-      name: '장어구이',
-      price: 25000,
-    },
-    {
-      name: '소주',
-      price: 5000,
-    },
-    {
-      name: '맥주',
-      price: 5000,
-    },
-    {
-      name: '장어찜',
-      price: 35000,
-    },
-    {
-      name: '미꾸라지탕',
-      price: 15000,
-    },
-  ],
-  opening_hours: {
-    status: '영업 중',
-    schedules: [
-      {
-        day: 'mon',
-        hours: '08:00~17:00',
-      },
-      {
-        day: 'tue',
-        hours: '08:00~17:00',
-      },
-      {
-        day: 'wed',
-        hours: '08:00~17:00',
-      },
-      {
-        day: 'thu',
-        hours: '08:00~17:00',
-      },
-      {
-        day: 'fri',
-        hours: '08:00~17:00',
-      },
-      {
-        day: 'sat',
-        hours: null,
-      },
-      {
-        day: 'sun',
-        hours: null,
-      },
-    ],
-  },
-};
