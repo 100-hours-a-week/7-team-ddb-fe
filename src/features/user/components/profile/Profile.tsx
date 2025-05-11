@@ -17,7 +17,11 @@ export function Profile({
     <div className="flex flex-col items-center px-4 py-6">
       <div className="relative mb-4 aspect-square w-32 overflow-hidden rounded-full">
         {profile_image ? (
-          <img src={profile_image} alt={username} className="object-cover" />
+          <img
+            src={profile_image}
+            alt={username}
+            className="h-full w-full object-cover"
+          />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-gray-200">
             <User className="h-12 w-12 text-gray-400" />
