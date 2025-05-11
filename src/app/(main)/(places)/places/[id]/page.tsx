@@ -34,7 +34,7 @@ export default async function PlaceDetailPage({
     <div className="flex h-screen flex-col">
       <Header showBackButton />
       <div className="flex-1 overflow-y-auto pb-16">
-        <div className="container mx-auto mb-4 px-4 py-5">
+        <div className="container mx-auto mb-4 px-4 pt-5 pb-10">
           <PlaceBasicInfo placeBasicInfo={placeBasicInfo} />
           {!isOpenHoursEmpty && <PlaceOpenHours openHours={opening_hours} />}
           {!isMenuEmpty && <PlaceMenu menu={menu} />}
