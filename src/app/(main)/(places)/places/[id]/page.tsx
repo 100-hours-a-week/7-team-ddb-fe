@@ -27,14 +27,17 @@ export default async function PlaceDetailPage({
 
   const { opening_hours, menu, ...placeBasicInfo } = place;
 
+  const isMenuEmpty = menu.length === 0;
+  const isOpenHoursEmpty = opening_hours.status === '영업 여부 확인 필요';
+
   return (
     <div className="flex h-screen flex-col">
       <Header showBackButton />
       <div className="flex-1 overflow-y-auto pb-16">
         <div className="container mx-auto mb-4 px-4 py-5">
           <PlaceBasicInfo placeBasicInfo={placeBasicInfo} />
-          <PlaceOpenHours openHours={opening_hours} />
-          <PlaceMenu menu={menu} />
+          {!isOpenHoursEmpty && <PlaceOpenHours openHours={opening_hours} />}
+          {!isMenuEmpty && <PlaceMenu menu={menu} />}
         </div>
       </div>
     </div>
