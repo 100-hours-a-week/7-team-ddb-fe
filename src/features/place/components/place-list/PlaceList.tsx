@@ -11,7 +11,7 @@ export interface PlaceListProps {
 }
 
 export function PlaceList({ places }: PlaceListProps) {
-  const snapPoints = ['300px', '400px', 1];
+  const snapPoints = ['200px', '355px', 1];
   const minSnap = snapPoints[0];
 
   const [isOpen, setIsOpen] = useState(true);
@@ -37,7 +37,7 @@ export function PlaceList({ places }: PlaceListProps) {
     >
       <Drawer.Portal>
         <Drawer.Content
-          className="fixed right-0 bottom-0 left-0 z-50 mx-auto flex max-w-[430px] flex-col rounded-t-2xl border-t bg-white shadow-lg"
+          className="fixed right-0 bottom-0 left-0 z-50 mx-auto flex h-full max-w-[430px] flex-col rounded-t-2xl border-t bg-white shadow-lg"
           style={{ maxHeight: '100dvh' }}
         >
           <div className="mx-auto mt-4 h-1.5 w-12 rounded-full bg-zinc-300" />
