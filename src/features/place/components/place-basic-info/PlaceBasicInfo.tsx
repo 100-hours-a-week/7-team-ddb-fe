@@ -10,11 +10,19 @@ export function PlaceBasicInfo({ placeBasicInfo }: PlaceBasicInfoProps) {
   return (
     <>
       <div className="relative mb-6 aspect-square w-full overflow-hidden rounded-lg">
-        <img
-          src={thumbnail}
-          alt={name}
-          className="h-full w-full object-cover"
-        />
+        {thumbnail ? (
+          <img
+            src={thumbnail}
+            alt={name}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div className="h-full w-full bg-gray-200">
+            <div className="flex h-full w-full items-center justify-center">
+              <div className="text-center text-gray-500">이미지 없음</div>
+            </div>
+          </div>
+        )}
       </div>
       <h1 className="heading-1 mb-4">{name}</h1>
       <div className="mb-6">

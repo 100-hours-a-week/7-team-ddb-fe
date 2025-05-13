@@ -33,11 +33,19 @@ export function PlaceItem({
         onClick={isClickable ? handleDetailClick : undefined}
       >
         <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg">
-          <img
-            src={thumbnail}
-            alt="장소 이미지"
-            className="h-full w-full object-cover"
-          />
+          {thumbnail ? (
+            <img
+              src={thumbnail}
+              alt="장소 이미지"
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="h-full w-full bg-gray-200">
+              <div className="flex h-full w-full items-center justify-center">
+                <div className="text-center text-gray-500">이미지 없음</div>
+              </div>
+            </div>
+          )}
         </div>
         <div className="flex flex-col gap-2">
           <div className="heading-3">{name}</div>
