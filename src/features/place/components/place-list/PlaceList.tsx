@@ -11,7 +11,7 @@ export interface PlaceListProps {
 }
 
 export function PlaceList({ places }: PlaceListProps) {
-  const snapPoints = ['200px', '355px', 1];
+  const snapPoints = ['300px', '400px', 1];
   const minSnap = snapPoints[0];
 
   const [isOpen, setIsOpen] = useState(true);
