@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${pretendard.variable}`}>
         <div className="mobile-container relative">
-          <main className="min-h-screen w-full">
+          <main className="h-full w-full">
             {children}
             <Toaster />
           </main>
