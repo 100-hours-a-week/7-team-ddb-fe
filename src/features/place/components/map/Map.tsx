@@ -44,10 +44,6 @@ export function Map({ places }: MapProps) {
             );
           }
         });
-      } else {
-        console.error(
-          '[Map Initial useEffect] Kakao maps object not found after script load.',
-        );
       }
     });
   }, []);
