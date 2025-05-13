@@ -3,6 +3,7 @@
 import { ArrowLeft, Search } from 'iconoir-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '../../constants';
 import { useSearchBar } from '../../hooks/useSearchBar';
 
 export function SearchResultBar() {
@@ -18,7 +19,9 @@ export function SearchResultBar() {
     const validatedQuery = validateSearch(searchQuery);
 
     if (validatedQuery) {
-      router.push(`/search?q=${encodeURIComponent(validatedQuery)}`);
+      router.push(
+        `/search?query=${encodeURIComponent(validatedQuery)}&lat=${DEFAULT_LATITUDE}&lng=${DEFAULT_LONGITUDE}`,
+      );
     }
   };
 
