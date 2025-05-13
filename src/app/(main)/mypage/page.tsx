@@ -11,7 +11,11 @@ export default function MyPage() {
   const { user } = useUser();
 
   if (!user) {
-    return <div>로딩중...</div>;
+    return (
+      <div className="flex h-full w-full items-center justify-center">
+        로딩중...
+      </div>
+    );
   }
 
   const { username, profile_image, introduction } = user;
