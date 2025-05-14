@@ -11,6 +11,9 @@ export async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get('access_token')?.value;
   const exists = publicOnlyUrls[request.nextUrl.pathname];
 
+  console.log('accessToken 확인', accessToken);
+  console.log('exists 확인', exists);
+
   if (!accessToken) {
     if (!exists) {
       return NextResponse.redirect(new URL('/onboarding', request.url));
