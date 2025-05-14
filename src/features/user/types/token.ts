@@ -10,17 +10,17 @@ export interface TokensRequestBody {
 
 // /api/v1/auth/tokens 성공 응답 데이터 타입
 export interface AuthTokens {
-  accessToken: string;
-  expiresIn: number;
-  newUser: boolean;
-  refreshToken: string | null;
-  tokenType: 'Bearer';
+  access_token: string;
+  expires_in: number;
+  new_user: boolean;
+  refresh_token: string | null;
+  token_type: 'Bearer';
   user: {
     id: string;
-    locationAgree: boolean;
-    privacyAgreed: boolean;
-    profileCompleted: boolean;
-    profileImageUrl: string | null;
+    location_agreed: boolean;
+    privacy_agreed: boolean;
+    profile_completed: boolean;
+    profile_image_url: string | null;
     provider: 'KAKAO';
     username: string;
   };

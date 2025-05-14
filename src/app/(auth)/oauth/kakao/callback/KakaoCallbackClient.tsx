@@ -35,7 +35,7 @@ export default function KakaoCallbackClient() {
           return;
         }
 
-        if (!response.user.profileCompleted) {
+        if (!response.user.profile_completed) {
           router.push('/auth/consent');
         } else {
           router.push('/');
