@@ -27,7 +27,7 @@ export default async function PlaceDetailPage({
 
   const { opening_hours, menu, ...placeBasicInfo } = place;
 
-  const isMenuEmpty = menu.length === 0;
+  const isMenuEmpty = !menu || menu.length === 0;
   const isOpenHoursEmpty = opening_hours.status === '영업 여부 확인 필요';
 
   return (
