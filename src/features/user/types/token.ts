@@ -5,7 +5,7 @@ export interface OAuthRedirectResponse {
 
 // /api/v1/auth/tokens 요청 바디 타입
 export interface TokensRequestBody {
-  authorizationCode: string;
+  authorization_code: string;
 }
 
 // /api/v1/auth/tokens 성공 응답 데이터 타입
