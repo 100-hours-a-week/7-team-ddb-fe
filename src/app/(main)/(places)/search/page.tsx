@@ -1,13 +1,15 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 
 import {
   Map,
   Place,
   PlaceList,
   searchPlaces,
+  SearchPlacesResponse,
   SearchResultBar,
 } from '@/features/place';
 
@@ -18,40 +20,27 @@ export default function SearchPage() {
   const lng = searchParams.get('lng');
   const category = searchParams.get('category');
 
-  const [places, setPlaces] = useState<Place[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const queryKey = ['searchPlaces', query, lat, lng, category];
 
-  useEffect(() => {
-    const fetchPlaces = async () => {
-      setIsLoading(true);
-      const currentLat = lat || undefined;
-      const currentLng = lng || undefined;
-      const currentQuery = query || null;
-      const currentCategory = category || null;
-
-      if (currentLat && currentLng) {
-        try {
-          const result = await searchPlaces({
-            query: currentQuery,
-            lat: currentLat,
-            lng: currentLng,
-            category: currentCategory,
-          });
-          console.log('장소 검색 결과:', result.places);
-          setPlaces(result.places || []);
-        } catch (error) {
-          console.error('장소 검색 API 호출 중 오류:', error);
-          setPlaces([]);
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        console.log('위치 정보(lat, lng)가 없어 장소를 검색할 수 없습니다.');
+  const { data, isLoading } = useQuery<SearchPlacesResponse>({
+    queryKey,
+    queryFn: async () => {
+      if (!lat || !lng) {
+        return {
+          total: 0,
+          places: [],
+        };
       }
-    };
 
-    fetchPlaces();
-  }, [query, lat, lng, category]);
+      return await searchPlaces({ query, lat, lng, category });
+    },
+    enabled: !!lat && !!lng,
+    staleTime: 10 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  });
+
+  const places: Place[] = data?.places || [];
 
   if (isLoading) {
     return (
