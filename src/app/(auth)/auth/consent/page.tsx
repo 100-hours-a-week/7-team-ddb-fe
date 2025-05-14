@@ -20,8 +20,8 @@ export default function Consent() {
   const handleAgreement = async () => {
     try {
       await postAgreement({
-        locationAgreed: true,
-        privacyAgreed: true,
+        location_agreed: true,
+        privacy_agreed: true,
       });
 
       router.push('/auth/signup');

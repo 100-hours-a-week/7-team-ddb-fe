@@ -27,7 +27,7 @@ export default function KakaoCallbackClient() {
       }
 
       try {
-        const response = await issueAuthTokens({ authorizationCode: code });
+        const response = await issueAuthTokens({ authorization_code: code });
 
         if (!response || !response.user) {
           console.error('issueAuthTokens 응답에 user 객체 없음', response);
@@ -35,7 +35,7 @@ export default function KakaoCallbackClient() {
           return;
         }
 
-        if (!response.user.profileCompleted) {
+        if (!response.user.profile_completed) {
           router.push('/auth/consent');
         } else {
           router.push('/');
