@@ -20,16 +20,16 @@ export interface Place {
 export interface PlaceDetail {
   id: number;
   name: string;
-  address: string;
-  thumbnail: string;
+  address: string | null;
+  thumbnail: string | null;
   location: {
     coordinates: [number, number];
     type: string;
   };
   keywords: string[];
   description: string;
-  phone: string;
-  menu: Menu[];
+  phone: string | null;
+  menu?: Menu[];
   opening_hours: OpenHours;
 }
 
@@ -49,5 +49,5 @@ export interface OpenHours {
 }
 export interface Menu {
   name: string;
-  price: number;
+  price: number | null;
 }

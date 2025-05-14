@@ -26,8 +26,8 @@ export function PlaceBasicInfo({ placeBasicInfo }: PlaceBasicInfoProps) {
       </div>
       <h1 className="heading-1 mb-4">{name}</h1>
       <div className="mb-6">
-        <p className="body-text mb-2 text-gray-600">{address}</p>
-        <p className="body-text mb-2 text-gray-600">{phone}</p>
+        {address && <p className="body-text mb-2 text-gray-600">{address}</p>}
+        {phone && <p className="body-text mb-2 text-gray-600">{phone}</p>}
         <div className="mb-4 flex gap-2">
           {keywords.map((keyword) => (
             <span

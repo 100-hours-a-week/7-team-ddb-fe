@@ -26,9 +26,11 @@ export function PlaceMenu({ menu }: PlaceMenuProps) {
         {visibleMenu.map((item) => (
           <div key={item.name} className="flex items-center justify-between">
             <span className="body-text text-gray-800">{item.name}</span>
-            <span className="body-text text-gray-600">
-              {item.price.toLocaleString()}원
-            </span>
+            {item.price && (
+              <span className="body-text text-gray-600">
+                {item.price.toLocaleString()}원
+              </span>
+            )}
           </div>
         ))}
       </div>
