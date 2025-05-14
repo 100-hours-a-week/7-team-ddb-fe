@@ -11,7 +11,6 @@ export async function issueAuthTokens(
       body: JSON.stringify(body),
     });
 
-    console.log('response', response);
     return response;
   } catch (error) {
     if (error instanceof FetchApiError) {
