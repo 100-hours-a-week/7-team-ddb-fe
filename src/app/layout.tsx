@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import { Toaster } from '@/shared/components';
 import { pretendard } from '@/shared/fonts';
+import { QueryProvider } from '@/shared/providers';
 
 import './globals.css';
 
@@ -24,12 +25,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${pretendard.variable}`}>
-        <div className="mobile-container relative">
-          <main className="h-full w-full">
-            {children}
-            <Toaster />
-          </main>
-        </div>
+        <QueryProvider>
+          <div className="mobile-container relative">
+            <main className="h-full w-full">
+              {children}
+              <Toaster />
+            </main>
+          </div>
+        </QueryProvider>
       </body>
     </html>
   );
