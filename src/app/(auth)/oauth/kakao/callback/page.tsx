@@ -14,7 +14,7 @@ export default function KakaoCallbackPage() {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
+        height: '100svh',
         padding: '20px',
         textAlign: 'center',
       }}
