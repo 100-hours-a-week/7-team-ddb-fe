@@ -63,7 +63,7 @@ export function Map({ places }: MapProps) {
       <div
         id="map"
         className="absolute inset-0 z-0 h-full w-full"
-        style={{ minHeight: '100vh' }}
+        style={{ minHeight: '100svh' }}
       />
       <PlaceBottomSheet
         isOpen={isBottomSheetOpen}
