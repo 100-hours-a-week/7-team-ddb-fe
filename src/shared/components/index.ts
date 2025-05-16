@@ -9,3 +9,4 @@ export * from './form';
 export * from './button';
 export * from './card';
 export * from './checkbox';
+export * from './feedback-button';

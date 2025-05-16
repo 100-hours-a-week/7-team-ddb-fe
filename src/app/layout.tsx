@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { Toaster } from '@/shared/components';
+import { FeedbackButton, Toaster } from '@/shared/components';
 import { pretendard } from '@/shared/fonts';
 import { QueryProvider } from '@/shared/providers';
 
@@ -33,6 +33,7 @@ export default function RootLayout({
             </main>
           </div>
         </QueryProvider>
+        <FeedbackButton />
       </body>
     </html>
   );
