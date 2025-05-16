@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { FeedbackButton, Toaster } from '@/shared/components';
+import { BackgroundPanel, FeedbackButton, Toaster } from '@/shared/components';
 import { pretendard } from '@/shared/fonts';
 import { QueryProvider } from '@/shared/providers';
 
@@ -26,6 +26,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${pretendard.variable}`}>
         <QueryProvider>
+          <BackgroundPanel />
           <div className="mobile-container relative">
             <main className="h-full w-full">
               {children}
