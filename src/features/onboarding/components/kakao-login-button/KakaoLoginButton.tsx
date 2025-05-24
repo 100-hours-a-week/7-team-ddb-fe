@@ -12,6 +12,10 @@ export function KakaoLoginButton() {
   useEffect(() => {
     const handleRedirect = async () => {
       const { redirect_url } = await getOAuthRedirectUrl();
+      console.log(
+        'redirect_url : 백엔드에서 보내주는 리다이렉트 URL',
+        redirect_url,
+      );
       setRedirectUrl(redirect_url);
     };
     handleRedirect();

@@ -42,9 +42,10 @@ export async function fetchApi<T = unknown>(
     method: 'GET',
   },
 ): Promise<T> {
-  const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const url = `${apiBaseUrl}${endpoint}`;
+  //const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  //const url = `${apiBaseUrl}${endpoint}`;
 
+  const url = `${endpoint}`;
   const defaultHeaders: HeadersInit = {
     'Content-Type': 'application/json',
     // 'Authorization': `Bearer ${getAuthToken()}`,

@@ -52,7 +52,7 @@ export default function SearchPage() {
 
   return (
     <div className="relative h-full w-full">
-      <div className="absolute top-0 left-0 z-10 flex w-full flex-col gap-5">
+      <div className="absolute top-0 left-0 z-100 flex w-full flex-col gap-5">
         <Suspense>
           <SearchResultBar />
         </Suspense>
