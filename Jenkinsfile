@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SERVICE_NAME    = 'fe'
+        SERVICE_NAME    = 'frontend'
         PROJECT_ID      = 'velvety-calling-458402-c1'
         REGION          = 'asia-northeast3'
         GAR_HOST        = 'asia-northeast3-docker.pkg.dev'
@@ -36,6 +36,21 @@ pipeline {
 
                     env.TAG = "${env.SERVICE_NAME}:${env.BUILD_NUMBER}"
                     env.GAR_IMAGE = "${env.GAR_HOST}/${env.PROJECT_ID}/${env.REPO_NAME}/${env.TAG}"
+                }
+            }
+        }
+
+        stage('Notify Before Start') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'Discord-Webhook', variable: 'DISCORD')]) {
+                        discordSend(
+                            description: "🚀 배포가 곧 시작됩니다: ${env.SERVICE_NAME} - ${env.BRANCH} 브랜치",
+                            link: env.BUILD_URL,
+                            title: "배포 시작",
+                            webhookURL: "$DISCORD"
+                        )
+                    }
                 }
             }
         }
@@ -129,6 +144,33 @@ scp -i ${env.SSH_KEY_PATH} -o StrictHostKeyChecking=no deploy.sh ${env.SSH_USER}
 ssh -tt -i ${env.SSH_KEY_PATH} -o StrictHostKeyChecking=no ${env.SSH_USER}@${env.FE_PRIVATE_IP} "bash /tmp/deploy.sh"
 """
                 }
+            }
+        }
+    }
+
+    post {
+        success {
+            withCredentials([string(credentialsId: 'Discord-Webhook', variable: 'DISCORD')]) {
+                discordSend description: """
+                제목 : ${currentBuild.displayName}
+                결과 : ${currentBuild.result}
+                실행 시간 : ${currentBuild.duration / 1000}s
+                """,
+                link: env.BUILD_URL, result: currentBuild.currentResult,
+                title: "${env.JOB_NAME} : ${currentBuild.displayName} 성공",
+                webhookURL: "$DISCORD"
+            }
+        }
+        failure {
+            withCredentials([string(credentialsId: 'Discord-Webhook', variable: 'DISCORD')]) {
+                discordSend description: """
+                제목 : ${currentBuild.displayName}
+                결과 : ${currentBuild.result}
+                실행 시간 : ${currentBuild.duration / 1000}s
+                """,
+                link: env.BUILD_URL, result: currentBuild.currentResult,
+                title: "${env.JOB_NAME} : ${currentBuild.displayName} 실패",
+                webhookURL: "$DISCORD"
             }
         }
     }
