@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SERVICE_NAME    = 'fe'
+        SERVICE_NAME    = 'frontend'
         PROJECT_ID      = 'velvety-calling-458402-c1'
         REGION          = 'asia-northeast3'
         GAR_HOST        = 'asia-northeast3-docker.pkg.dev'
@@ -13,29 +13,44 @@ pipeline {
     }
 
     stages {
-        stage('Set Environment by Branch') {
+        stage('Set Branch & Cron Trigger') {
             steps {
                 script {
-                    def branchName = env.GIT_BRANCH.replaceFirst(/^origin\//, '')
+                    def branchName = env.BRANCH_NAME ?: env.GIT_BRANCH?.replaceFirst(/^origin\//, '')
                     env.BRANCH = branchName
 
-                    // 브랜치에 따라 환경 분기 설정
                     if (branchName == 'main') {
-                        env.FE_PRIVATE_IP = '10.10.20.2'
-                        env.ENV_LABEL = 'prod'
-                        env.REPO_NAME = 'dolpin-docker-image-prod'
-                        env.API_BASE_CRED_ID = 'NEXT_PUBLIC_API_BASE_PROD'
+                        properties([pipelineTriggers([cron('30 0 * * 1-5')])])
                     } else if (branchName == 'dev') {
-                        env.FE_PRIVATE_IP = '10.20.20.2'
-                        env.ENV_LABEL = 'dev'
-                        env.REPO_NAME = 'dolpin-docker-image-dev'
-                        env.API_BASE_CRED_ID = 'NEXT_PUBLIC_API_BASE_DEV'
+                        properties([pipelineTriggers([
+                            cron('30 3 * * 1-4'),
+                            cron('30 0 * * 5'),
+                            cron('30 3 * * 6,7')
+                        ])])
                     } else {
-                        error "지원되지 않는 브랜치입니다: ${branchName}"
+                        properties([pipelineTriggers([])])
+                        echo "⛔ 지원되지 않는 브랜치입니다: ${branchName}. 빌드를 중단합니다."
+                        currentBuild.result = 'NOT_BUILT'
+                        error("Unsupported branch: ${branchName}")
                     }
+                }
+            }
+        }
 
-                    env.TAG = "${env.SERVICE_NAME}:${env.BUILD_NUMBER}"
-                    env.GAR_IMAGE = "${env.GAR_HOST}/${env.PROJECT_ID}/${env.REPO_NAME}/${env.TAG}"
+        stage('Notify Before Start') {
+            when {
+                expression { env.BRANCH in ['main', 'dev'] }
+            }
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'Discord-Webhook', variable: 'DISCORD')]) {
+                        discordSend(
+                            description: "🚀 배포가 곧 시작됩니다: ${env.SERVICE_NAME} - ${env.BRANCH} 브랜치",
+                            link: env.BUILD_URL,
+                            title: "배포 시작",
+                            webhookURL: "$DISCORD"
+                        )
+                    }
                 }
             }
         }
@@ -43,6 +58,27 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Set Environment by Branch') {
+            steps {
+                script {
+                    if (env.BRANCH == 'main') {
+                        env.FE_PRIVATE_IP = '10.10.20.2'
+                        env.ENV_LABEL = 'prod'
+                        env.REPO_NAME = 'dolpin-docker-image-prod'
+                        env.API_BASE_CRED_ID = 'NEXT_PUBLIC_API_BASE_PROD'
+                    } else {
+                        env.FE_PRIVATE_IP = '10.20.20.2'
+                        env.ENV_LABEL = 'dev'
+                        env.REPO_NAME = 'dolpin-docker-image-dev'
+                        env.API_BASE_CRED_ID = 'NEXT_PUBLIC_API_BASE_DEV'
+                    } 
+
+                    env.TAG = "${env.SERVICE_NAME}:${env.BUILD_NUMBER}"
+                    env.GAR_IMAGE = "${env.GAR_HOST}/${env.PROJECT_ID}/${env.REPO_NAME}/${env.TAG}"
+                }
             }
         }
 
@@ -128,6 +164,41 @@ scp -i ${env.SSH_KEY_PATH} -o StrictHostKeyChecking=no deploy.sh ${env.SSH_USER}
 
 ssh -tt -i ${env.SSH_KEY_PATH} -o StrictHostKeyChecking=no ${env.SSH_USER}@${env.FE_PRIVATE_IP} "bash /tmp/deploy.sh"
 """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            script {
+                if (env.BRANCH in ['main', 'dev']) {
+                    withCredentials([string(credentialsId: 'Discord-Webhook', variable: 'DISCORD')]) {
+                        discordSend description: """
+                        제목 : ${currentBuild.displayName}
+                        결과 : ${currentBuild.result}
+                        실행 시간 : ${currentBuild.duration / 1000}s
+                        """,
+                        link: env.BUILD_URL, result: currentBuild.currentResult,
+                        title: "${env.JOB_NAME} : ${currentBuild.displayName} 성공",
+                        webhookURL: "$DISCORD"
+                    }
+                }
+            }
+        }
+        failure {
+            script {
+                if (env.BRANCH in ['main', 'dev']) {
+                    withCredentials([string(credentialsId: 'Discord-Webhook', variable: 'DISCORD')]) {
+                        discordSend description: """
+                        제목 : ${currentBuild.displayName}
+                        결과 : ${currentBuild.result}
+                        실행 시간 : ${currentBuild.duration / 1000}s
+                        """,
+                        link: env.BUILD_URL, result: currentBuild.currentResult,
+                        title: "${env.JOB_NAME} : ${currentBuild.displayName} 실패",
+                        webhookURL: "$DISCORD"
+                    }
                 }
             }
         }
