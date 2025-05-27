@@ -10,7 +10,7 @@ export interface PlaceListProps {
   places: Place[];
 }
 
-export function PlaceList({ places }: PlaceListProps) {
+export function PlaceListBottomSheet({ places }: PlaceListProps) {
   const snapPoints = ['200px', '355px', 1];
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
 
@@ -24,7 +24,7 @@ export function PlaceList({ places }: PlaceListProps) {
     >
       <Drawer.Portal>
         <Drawer.Content
-          className="fixed right-0 bottom-0 left-0 z-10 mx-auto flex h-full max-w-[430px] flex-col rounded-t-2xl border-t bg-white shadow-lg"
+          className="fixed right-0 bottom-0 left-0 z-10 mx-auto flex h-full max-w-[430px] flex-col rounded-t-2xl border-t bg-white shadow-lg outline-none"
           style={{ maxHeight: 'calc(100svh - 60px)' }}
         >
           <div className="mx-auto mt-4 h-1.5 w-12 rounded-full bg-zinc-300" />

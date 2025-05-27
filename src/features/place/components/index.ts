@@ -4,7 +4,7 @@ export * from './category-list';
 export * from './keyword-list';
 export * from './place-bottom-sheet';
 export * from './search-result-bar';
-export * from './place-list';
+export * from './place-list-bottom-sheet';
 export * from './place-menu';
 export * from './place-open-hours';
 export * from './place-basic-info';

@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import {
   Map,
   Place,
-  PlaceList,
+  PlaceListBottomSheet,
   searchPlaces,
   SearchPlacesResponse,
 } from '@/features/place';
@@ -53,7 +53,7 @@ export default function SearchPage() {
       {places.length > 0 ? (
         <>
           <Map places={places} />
-          <PlaceList places={places} />
+          <PlaceListBottomSheet places={places} />
         </>
       ) : (
         <div className="flex h-full w-full items-center justify-center">
