@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Drawer } from 'vaul';
 
 import { Place } from '../../types';
@@ -12,28 +12,15 @@ export interface PlaceListProps {
 
 export function PlaceList({ places }: PlaceListProps) {
   const snapPoints = ['200px', '355px', 1];
-  const minSnap = snapPoints[0];
-
-  const [isOpen, setIsOpen] = useState(true);
-  const [snap, setSnap] = useState<string | number | null>(minSnap);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isOpen && contentRef.current) {
-      const firstButton = contentRef.current.querySelector('button');
-      firstButton?.focus();
-    }
-  }, [isOpen]);
+  const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
 
   return (
     <Drawer.Root
-      open={isOpen}
-      onOpenChange={(open) => {
-        if (open) setIsOpen(true);
-      }}
+      open={true}
       snapPoints={snapPoints}
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}
+      modal={false}
     >
       <Drawer.Portal>
         <Drawer.Content
