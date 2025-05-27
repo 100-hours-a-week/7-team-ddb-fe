@@ -26,7 +26,7 @@ export function SearchResultBar() {
   };
 
   return (
-    <div className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white px-4 py-3 shadow-sm">
+    <div className="sticky top-0 z-5 w-full border-b border-gray-200 bg-white px-4 py-3 shadow-sm">
       <div className="mx-auto flex max-w-screen-lg items-center gap-2">
         <button
           onClick={() => router.push('/')}

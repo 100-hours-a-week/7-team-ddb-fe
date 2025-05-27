@@ -10,7 +10,7 @@ export default function PlacesLayout({
   return (
     <div className="flex h-full w-full flex-col">
       <Suspense>
-        <div className="absolute top-0 left-0 z-9999 flex w-full flex-col gap-5">
+        <div className="absolute top-0 left-0 z-40 flex w-full flex-col gap-5">
           <SearchResultBar />
         </div>
       </Suspense>

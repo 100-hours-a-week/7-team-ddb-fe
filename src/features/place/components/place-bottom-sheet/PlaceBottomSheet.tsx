@@ -23,7 +23,7 @@ export function PlaceBottomSheet({
   return (
     <Drawer.Root open={isOpen} onOpenChange={onOpenChange}>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-40 bg-black/40" />
+        <Drawer.Overlay className="fixed inset-0 z-50 bg-black/40" />
         <Drawer.Content className="fixed right-0 bottom-0 left-0 z-50 mx-auto flex h-fit w-full max-w-[430px] flex-col rounded-t-[10px] bg-gray-100 outline-none">
           <div className="flex-1 rounded-t-[10px] bg-white p-4">
             <div className="max-w-m10 mx-auto mt-7">
