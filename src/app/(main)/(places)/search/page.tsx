@@ -2,15 +2,13 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
 
 import {
   Map,
   Place,
-  PlaceList,
+  PlaceListBottomSheet,
   searchPlaces,
   SearchPlacesResponse,
-  SearchResultBar,
 } from '@/features/place';
 
 export default function SearchPage() {
@@ -52,15 +50,10 @@ export default function SearchPage() {
 
   return (
     <div className="relative h-full w-full">
-      <div className="absolute top-0 left-0 z-10 flex w-full flex-col gap-5">
-        <Suspense>
-          <SearchResultBar />
-        </Suspense>
-      </div>
       {places.length > 0 ? (
         <>
           <Map places={places} />
-          <PlaceList places={places} />
+          <PlaceListBottomSheet places={places} />
         </>
       ) : (
         <div className="flex h-full w-full items-center justify-center">

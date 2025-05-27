@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Drawer } from 'vaul';
 
 import { Place } from '../../types';
@@ -10,35 +10,22 @@ export interface PlaceListProps {
   places: Place[];
 }
 
-export function PlaceList({ places }: PlaceListProps) {
+export function PlaceListBottomSheet({ places }: PlaceListProps) {
   const snapPoints = ['200px', '355px', 1];
-  const minSnap = snapPoints[0];
-
-  const [isOpen, setIsOpen] = useState(true);
-  const [snap, setSnap] = useState<string | number | null>(minSnap);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (isOpen && contentRef.current) {
-      const firstButton = contentRef.current.querySelector('button');
-      firstButton?.focus();
-    }
-  }, [isOpen]);
+  const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
 
   return (
     <Drawer.Root
-      open={isOpen}
-      onOpenChange={(open) => {
-        if (open) setIsOpen(true);
-      }}
+      open={true}
       snapPoints={snapPoints}
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}
+      modal={false}
     >
       <Drawer.Portal>
         <Drawer.Content
-          className="fixed right-0 bottom-0 left-0 z-50 mx-auto flex h-full max-w-[430px] flex-col rounded-t-2xl border-t bg-white shadow-lg"
-          style={{ maxHeight: '100svh' }}
+          className="fixed right-0 bottom-0 left-0 z-10 mx-auto flex h-full max-w-[430px] flex-col rounded-t-2xl border-t bg-white shadow-lg outline-none"
+          style={{ maxHeight: 'calc(100svh - 60px)' }}
         >
           <div className="mx-auto mt-4 h-1.5 w-12 rounded-full bg-zinc-300" />
           <Drawer.Title className="hidden">추천 장소 목록</Drawer.Title>
