@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 
 import { Place } from '../../types';
@@ -11,8 +11,25 @@ export interface PlaceListProps {
 }
 
 export function PlaceListBottomSheet({ places }: PlaceListProps) {
-  const snapPoints = ['200px', '355px', 1];
+  const snapPoints = ['255px', '400px', 1];
   const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
+
+  useLayoutEffect(() => {
+    const handleFocusIn = (e: FocusEvent) => {
+      e.stopImmediatePropagation();
+    };
+    const handleFocusOut = (e: FocusEvent) => {
+      e.stopImmediatePropagation();
+    };
+
+    document.addEventListener('focusin', handleFocusIn);
+    document.addEventListener('focusout', handleFocusOut);
+
+    return () => {
+      document.removeEventListener('focusin', handleFocusIn);
+      document.removeEventListener('focusout', handleFocusOut);
+    };
+  }, []);
 
   return (
     <Drawer.Root
