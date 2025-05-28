@@ -11,7 +11,7 @@ interface PlaceBottomSheetProps {
   place: Place | null;
 }
 
-export function PlaceBottomSheet({
+export function PlacePinBottomSheet({
   isOpen,
   onOpenChange,
   place,

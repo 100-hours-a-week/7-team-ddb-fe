@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '../../constants';
 import { Place } from '../../types';
 import { createPlaceMarkers, initializeMap } from '../../utils';
-import { PlaceBottomSheet } from '../place-bottom-sheet';
+import { PlacePinBottomSheet } from '../place-pin-bottom-sheet';
 
 import { loadKakaoMapScript } from '@/shared/lib/map';
 
@@ -65,7 +65,7 @@ export function Map({ places }: MapProps) {
         className="absolute inset-0 z-0 h-full w-full"
         style={{ minHeight: '100svh' }}
       />
-      <PlaceBottomSheet
+      <PlacePinBottomSheet
         isOpen={isBottomSheetOpen}
         onOpenChange={setIsBottomSheetOpen}
         place={selectedPlaceForSheet}
