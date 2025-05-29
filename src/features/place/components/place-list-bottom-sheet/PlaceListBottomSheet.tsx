@@ -1,8 +1,14 @@
 'use client';
 
-import { useLayoutEffect, useState } from 'react';
 import { Drawer } from 'vaul';
 
+import { BOTTOM_SHEET_SNAP_POINTS } from '../../constants';
+import {
+  useBottomSheetSnapManagement,
+  useGlobalFocusHandler,
+  useScrollRestoration,
+} from '../../hooks';
+import { useBottomSheetStore } from '../../stores';
 import { Place } from '../../types';
 import { PlaceItem } from '../place-item';
 
@@ -11,29 +17,28 @@ export interface PlaceListProps {
 }
 
 export function PlaceListBottomSheet({ places }: PlaceListProps) {
-  const snapPoints = ['255px', '400px', 1];
-  const [snap, setSnap] = useState<number | string | null>(snapPoints[0]);
+  const { opened, prevSnap, scrollY, setPrevSnap, setScrollY } =
+    useBottomSheetStore();
 
-  useLayoutEffect(() => {
-    const handleFocusIn = (e: FocusEvent) => {
-      e.stopImmediatePropagation();
-    };
-    const handleFocusOut = (e: FocusEvent) => {
-      e.stopImmediatePropagation();
-    };
+  const isOpen = opened === 'list';
 
-    document.addEventListener('focusin', handleFocusIn);
-    document.addEventListener('focusout', handleFocusOut);
+  const { snap, setSnap, snapPoints } = useBottomSheetSnapManagement({
+    initialSnapPoints: BOTTOM_SHEET_SNAP_POINTS,
+    persistedPrevSnap: prevSnap,
+    setPersistedPrevSnap: setPrevSnap,
+  });
 
-    return () => {
-      document.removeEventListener('focusin', handleFocusIn);
-      document.removeEventListener('focusout', handleFocusOut);
-    };
-  }, []);
+  const { scrollContainerRef, handleScroll } = useScrollRestoration({
+    isOpen,
+    persistedScrollY: scrollY,
+    setPersistedScrollY: setScrollY,
+  });
+
+  useGlobalFocusHandler(isOpen);
 
   return (
     <Drawer.Root
-      open={true}
+      open={isOpen}
       snapPoints={snapPoints}
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}
@@ -49,7 +54,11 @@ export function PlaceListBottomSheet({ places }: PlaceListProps) {
           <Drawer.Description className="hidden">
             당신이 원하는 장소를 추천해드립니다.
           </Drawer.Description>
-          <div className="my-10 flex-1 overflow-y-auto px-4 pb-10">
+          <div
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+            className="my-10 flex-1 overflow-y-auto px-4 pb-10"
+          >
             <div className="space-y-8">
               {places.map((place) => (
                 <div key={place.id} className="border-b border-zinc-200 pb-8">

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '../../constants';
 import { useSearchBar } from '../../hooks/useSearchBar';
+import { useBottomSheetStore } from '../../stores';
 
 export function SearchResultBar() {
   const searchParams = useSearchParams();
@@ -13,6 +14,7 @@ export function SearchResultBar() {
   const router = useRouter();
   const { searchQuery, validateSearch, handleInputChange } =
     useSearchBar(initialQuery);
+  const { resetForNewSearch } = useBottomSheetStore();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,6 +24,7 @@ export function SearchResultBar() {
       router.push(
         `/search?query=${encodeURIComponent(validatedQuery)}&lat=${DEFAULT_LATITUDE}&lng=${DEFAULT_LONGITUDE}`,
       );
+      resetForNewSearch();
     }
   };
 

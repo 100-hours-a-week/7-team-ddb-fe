@@ -2,7 +2,7 @@ export * from './map';
 export * from './search-bar';
 export * from './category-list';
 export * from './keyword-list';
-export * from './place-bottom-sheet';
+export * from './place-pin-bottom-sheet';
 export * from './search-result-bar';
 export * from './place-list-bottom-sheet';
 export * from './place-menu';
