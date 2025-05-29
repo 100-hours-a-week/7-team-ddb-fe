@@ -30,10 +30,10 @@ const profileSchema = z.object({
   username: z
     .string()
     .min(2, '2자 이상 입력해주세요')
-    .max(10)
+    .max(10, '10자 이하로 입력해주세요')
     .regex(/^[가-힣a-zA-Z0-9\s]+$/, '특수문자는 사용할 수 없습니다')
     .trim(),
-  introduction: z.string().max(70).optional(),
+  introduction: z.string().max(70, '70자 이하로 입력해주세요').optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -219,6 +219,7 @@ export function ProfileForm({
               <FormLabel className="heading-2">닉네임</FormLabel>
               <Input
                 placeholder="닉네임을 입력하세요"
+                maxLength={10}
                 {...field}
                 className="input-text"
                 disabled={isSubmittingForm}
@@ -235,6 +236,7 @@ export function ProfileForm({
               <FormLabel className="heading-2">소개글</FormLabel>
               <Textarea
                 placeholder="간단한 소개를 입력하세요"
+                maxLength={70}
                 {...field}
                 className="input-text"
                 disabled={isSubmittingForm}
