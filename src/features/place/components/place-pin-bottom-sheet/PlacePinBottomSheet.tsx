@@ -2,20 +2,22 @@
 
 import { Drawer } from 'vaul';
 
+import { useBottomSheetStore } from '../../stores';
 import { Place } from '../../types';
 import { PlaceItem } from '../place-item';
 
 interface PlaceBottomSheetProps {
-  isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   place: Place | null;
 }
 
 export function PlacePinBottomSheet({
-  isOpen,
   onOpenChange,
   place,
 }: PlaceBottomSheetProps) {
+  const opened = useBottomSheetStore((state) => state.opened);
+  const isOpen = opened === 'pin';
+
   if (!place) {
     return null;
   }
