@@ -184,3 +184,21 @@ export function createPlaceMarkers(
     }
   });
 }
+
+export function resetSelectedMarker() {
+  if (currentSelectedMarker) {
+    const normalImageSrc = '/img/pin.png';
+    const imageSize = new window.kakao.maps.Size(45, 45);
+    const imageOption = { offset: new window.kakao.maps.Point(20, 45) };
+
+    const normalMarkerImage = new window.kakao.maps.MarkerImage(
+      normalImageSrc,
+      imageSize,
+      imageOption,
+    );
+
+    currentSelectedMarker.setImage(normalMarkerImage);
+    currentSelectedMarker.setZIndex(1);
+    currentSelectedMarker = null;
+  }
+}
