@@ -3,14 +3,17 @@
 import { useRouter } from 'next/navigation';
 
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '../../constants';
+import { useBottomSheetStore } from '../../stores';
 
 export function Category({ category }: { category: string }) {
   const router = useRouter();
+  const { resetForNewSearch } = useBottomSheetStore();
 
   const handleClick = (category: string) => {
     router.push(
       `/search?category=${category}&lat=${DEFAULT_LATITUDE}&lng=${DEFAULT_LONGITUDE}`,
     );
+    resetForNewSearch();
   };
 
   return (
