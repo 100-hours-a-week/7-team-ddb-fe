@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '../../constants';
+import { usePlaceToast } from '../../hooks';
 import { useBottomSheetStore } from '../../stores';
 import { Place } from '../../types';
 import {
@@ -19,6 +20,7 @@ export interface MapProps {
 }
 
 export function Map({ places }: MapProps) {
+  const { showToast } = usePlaceToast();
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
 
@@ -36,6 +38,10 @@ export function Map({ places }: MapProps) {
     resetSelectedMarker();
   }, [setOpened]);
 
+  const handleOutOfBounds = useCallback(() => {
+    showToast('지도 영역을 벗어났습니다.');
+  }, [showToast]);
+
   useEffect(() => {
     loadKakaoMapScript(() => {
       if (window.kakao && window.kakao.maps) {
@@ -46,6 +52,7 @@ export function Map({ places }: MapProps) {
               mapContainer,
               DEFAULT_LATITUDE,
               DEFAULT_LONGITUDE,
+              handleOutOfBounds,
             );
             mapRef.current = initializedMap;
             setIsMapLoaded(true);
