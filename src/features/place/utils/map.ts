@@ -11,11 +11,7 @@ export function initializeMap(
   mapContainer: HTMLElement,
   lat: number = DEFAULT_LATITUDE,
   lng: number = DEFAULT_LONGITUDE,
-  onOutOfBounds?: (
-    map: kakao.maps.Map,
-    latLng: kakao.maps.LatLng,
-    bounds: kakao.maps.LatLngBounds,
-  ) => void,
+  onOutOfBounds?: () => void,
 ) {
   const latLng = new window.kakao.maps.LatLng(lat, lng);
   const mapOption = {
@@ -36,7 +32,7 @@ export function initializeMap(
     const center = map.getCenter();
     if (!isInBounds(bounds, center)) {
       map.setCenter(latLng);
-      if (onOutOfBounds) onOutOfBounds(map, latLng, bounds);
+      if (onOutOfBounds) onOutOfBounds();
     }
   };
   window.kakao.maps.event.addListener(map, 'dragend', keepCenterIfOutOfBounds);
