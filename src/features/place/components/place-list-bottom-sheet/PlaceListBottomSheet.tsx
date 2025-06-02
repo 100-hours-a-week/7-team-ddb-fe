@@ -12,11 +12,11 @@ import { useBottomSheetStore } from '../../stores';
 import { Place } from '../../types';
 import { PlaceItem } from '../place-item';
 
-export interface PlaceListProps {
+export interface PlaceListBottomSheetProps {
   places: Place[];
 }
 
-export function PlaceListBottomSheet({ places }: PlaceListProps) {
+export function PlaceListBottomSheet({ places }: PlaceListBottomSheetProps) {
   const { opened, prevSnap, scrollY, setPrevSnap, setScrollY } =
     useBottomSheetStore();
 

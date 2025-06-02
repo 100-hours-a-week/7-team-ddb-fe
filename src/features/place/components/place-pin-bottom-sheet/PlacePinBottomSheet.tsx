@@ -6,7 +6,7 @@ import { useBottomSheetStore } from '../../stores';
 import { Place } from '../../types';
 import { PlaceItem } from '../place-item';
 
-interface PlaceBottomSheetProps {
+interface PlacePinBottomSheetProps {
   onOpenChange: (open: boolean) => void;
   place: Place | null;
 }
@@ -14,7 +14,7 @@ interface PlaceBottomSheetProps {
 export function PlacePinBottomSheet({
   onOpenChange,
   place,
-}: PlaceBottomSheetProps) {
+}: PlacePinBottomSheetProps) {
   const opened = useBottomSheetStore((state) => state.opened);
   const isOpen = opened === 'pin';
 
