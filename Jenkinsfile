@@ -20,12 +20,12 @@ pipeline {
                     env.BRANCH = branchName
 
                     if (branchName == 'main') {
-                        properties([pipelineTriggers([cron('30 0 * * 1-5')])])
+                        properties([pipelineTriggers([cron('40 0 * * 1-5')])])
                     } else if (branchName == 'dev') {
                         properties([pipelineTriggers([
-                            cron('30 3 * * 1-4'),
-                            cron('0 1 * * 5'),
-                            cron('30 3 * * 6,7')
+                            cron('40 3 * * 1-4'),
+                            cron('40 23 * * 4'),
+                            cron('40 3 * * 6,7')
                         ])])
                     } else {
                         properties([pipelineTriggers([])])
