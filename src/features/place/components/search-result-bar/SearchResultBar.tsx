@@ -24,7 +24,7 @@ export function SearchResultBar() {
       router.push(
         `/search?query=${encodeURIComponent(validatedQuery)}&lat=${DEFAULT_LATITUDE}&lng=${DEFAULT_LONGITUDE}`,
       );
-      resetForNewSearch();
+      resetForNewSearch('freeform');
     }
   };
 
