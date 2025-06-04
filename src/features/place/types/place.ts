@@ -11,8 +11,9 @@ export interface Place {
   id: number;
   name: string;
   thumbnail: string;
-  distance: string;
-  moment_count: string;
+  distance: number;
+  moment_count: number;
+  similarity_score: number;
   keywords: string[];
   location: Location;
   is_bookmarked: boolean;
