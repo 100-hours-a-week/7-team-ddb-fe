@@ -43,7 +43,7 @@ export default function MyPage() {
       <div className="mt-12 flex flex-col items-center px-4">
         <Profile
           username={username}
-          profile_image={profile_image ?? ''}
+          profileImage={profile_image ?? ''}
           introduction={introduction ?? ''}
         />
         <button
