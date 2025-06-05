@@ -1,8 +1,13 @@
-import { Book, BookSolid, Home, HomeAlt, UserCircle } from 'iconoir-react';
+import {
+  Home,
+  HomeAlt,
+  MultiBubble,
+  MultiBubbleSolid,
+  UserCircle,
+} from 'iconoir-react';
 import React from 'react';
 
 export interface NavItem {
-  label: string;
   icon: React.ReactNode;
   solidIcon: React.ReactNode;
   href: string;
@@ -11,22 +16,19 @@ export interface NavItem {
 
 export const navigationItems: NavItem[] = [
   {
-    label: '다이어리',
-    icon: <Book className="h-6 w-6" />,
-    solidIcon: <BookSolid className="h-6 w-6" />,
+    icon: <MultiBubble className="h-8 w-8" />,
+    solidIcon: <MultiBubbleSolid className="h-8 w-8" />,
     href: '/moments',
   },
   {
-    label: '홈',
     icon: <Home className="h-12 w-12" />,
     solidIcon: <HomeAlt className="h-12 w-12" />,
     href: '/',
     isHome: true,
   },
   {
-    label: 'MY',
-    icon: <UserCircle className="h-7 w-7" />,
-    solidIcon: <UserCircle className="h-7 w-7" />,
+    icon: <UserCircle className="h-8 w-8" />,
+    solidIcon: <UserCircle className="h-8 w-8" />,
     href: '/mypage',
   },
 ];

@@ -25,7 +25,7 @@ export function BottomNavigation() {
       <ul className="flex h-full items-center justify-between px-6">
         {navigationItems.map((item) => (
           <BottomNavigationItem
-            key={item.label}
+            key={item.href}
             item={item}
             isActive={activeItem === item.href}
             onClick={() => handleClick(item.href)}

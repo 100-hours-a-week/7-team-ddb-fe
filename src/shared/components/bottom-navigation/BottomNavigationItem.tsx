@@ -35,11 +35,6 @@ export function BottomNavigationItem({
             >
               {isActive ? item.solidIcon : item.icon}
             </div>
-            <span
-              className={`text-xs ${isActive ? 'font-medium' : 'text-gray-500'}`}
-            >
-              {item.label}
-            </span>
           </>
         )}
       </button>
