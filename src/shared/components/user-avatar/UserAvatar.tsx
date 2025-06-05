@@ -1,5 +1,4 @@
 import { User } from 'iconoir-react';
-import Image from 'next/image';
 
 export interface UserAvatarProps {
   imageUrl?: string;
@@ -24,7 +23,7 @@ export function UserAvatar({ imageUrl, size = 'medium' }: UserAvatarProps) {
       className={`relative aspect-square w-${sizeMap[size]} w- overflow-hidden rounded-full`}
     >
       {imageUrl ? (
-        <Image
+        <img
           src={imageUrl}
           alt="user avatar"
           className="h-full w-full object-cover"
