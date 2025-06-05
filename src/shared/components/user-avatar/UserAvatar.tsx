@@ -1,7 +1,7 @@
 import { User } from 'iconoir-react';
 
 export interface UserAvatarProps {
-  imageUrl?: string;
+  imageUrl: string | null;
   size?: 'small' | 'medium' | 'large';
 }
 
