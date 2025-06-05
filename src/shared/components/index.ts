@@ -12,3 +12,4 @@ export * from './checkbox';
 export * from './feedback-button';
 export * from './background-panel';
 export * from './full-screen-message';
+export * from './user-avatar';
