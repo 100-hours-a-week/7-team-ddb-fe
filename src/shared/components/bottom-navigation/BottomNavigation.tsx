@@ -21,7 +21,7 @@ export function BottomNavigation() {
   };
 
   return (
-    <nav className="absolute right-0 bottom-0 left-0 z-10 h-20 border-t border-gray-200 bg-white">
+    <nav className="fixed bottom-0 z-10 h-20 w-full max-w-[430px] min-w-[375px] border-t border-gray-200 bg-white">
       <ul className="flex h-full items-center justify-between px-6">
         {navigationItems.map((item) => (
           <BottomNavigationItem
