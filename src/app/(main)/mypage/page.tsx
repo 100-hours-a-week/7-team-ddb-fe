@@ -39,7 +39,7 @@ export default function MyPage() {
 
   return (
     <>
-      <Header title="마이페이지" />
+      <Header />
       <div className="mt-12 flex flex-col items-center px-4">
         <Profile
           username={username}
