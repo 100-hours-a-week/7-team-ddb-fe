@@ -3,7 +3,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRef, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+
+import { ProfileFormValues, profileSchema } from '../../schemas';
 
 import {
   Button,
@@ -24,19 +25,6 @@ const ACCEPTED_IMAGE_TYPES = [
   'image/png',
   'image/webp',
 ];
-
-const profileSchema = z.object({
-  profile_image: z.string().optional(),
-  username: z
-    .string()
-    .min(2, '2자 이상 입력해주세요')
-    .max(10, '10자 이하로 입력해주세요')
-    .regex(/^[가-힣a-zA-Z0-9\s]+$/, '특수문자는 사용할 수 없습니다')
-    .trim(),
-  introduction: z.string().max(70, '70자 이하로 입력해주세요').optional(),
-});
-
-type ProfileFormValues = z.infer<typeof profileSchema>;
 
 export interface ProfileFormProps {
   onSubmit: (data: ProfileFormValues) => Promise<void>;
