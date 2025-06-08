@@ -14,3 +14,4 @@ export * from './background-panel';
 export * from './full-screen-message';
 export * from './user-avatar';
 export * from './switch';
+export * from './dropdown-menu';
