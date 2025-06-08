@@ -19,6 +19,52 @@ export interface Author {
   profileImage: string | null;
 }
 
+export interface MomentDetail {
+  id: string;
+  title: string;
+  images: string[];
+  content: string;
+  isOwner: boolean;
+  isPublic: boolean;
+  createdAt: string;
+  viewCount: number;
+  commentCount: number;
+  author: Author;
+  place?: Place;
+}
+
+export interface Place {
+  id: string;
+  name: string;
+}
+
+export const dummyMomentDetail: MomentDetail = {
+  id: 'moment_123',
+  title: '오늘의 맛집 탐방',
+  images: [
+    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4',
+    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5',
+    'https://images.unsplash.com/photo-1552566626-52f8b828add9',
+  ],
+  content:
+    '오늘은 강남에 있는 새로운 이탈리안 레스토랑을 방문했어요. 트러플 파스타와 와인 페어링이 정말 환상적이었습니다. 분위기도 좋고 서비스도 훌륭했어요. 다음에 또 방문하고 싶은 곳이에요! #맛집 #이탈리안 #강남',
+  place: {
+    id: '1096949102',
+    name: '트러플 이탈리안',
+  },
+  isOwner: true,
+  isPublic: true,
+  createdAt: '2024-03-15T14:30:00Z',
+  viewCount: 156,
+  commentCount: 12,
+  author: {
+    id: 'user_789',
+    nickname: '맛집탐험가',
+    profileImage:
+      'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde',
+  },
+};
+
 export const dummyMomentListData: MomentListType = [
   {
     id: '1',
