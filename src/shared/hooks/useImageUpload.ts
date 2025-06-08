@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 
 import { getPresignedUrl, type PresignedUrlResponseData } from '@/shared/api';
 import { FetchApiError } from '@/shared/lib/fetchApi';
@@ -10,6 +10,7 @@ interface UseImageUploadResult {
   isLoading: boolean;
   error: Error | null;
   uploadedObjectUrl: string | null;
+  setError: Dispatch<SetStateAction<Error | null>>;
 }
 
 export function useImageUpload(): UseImageUploadResult {
@@ -68,5 +69,6 @@ export function useImageUpload(): UseImageUploadResult {
     isLoading,
     error,
     uploadedObjectUrl,
+    setError,
   };
 }
