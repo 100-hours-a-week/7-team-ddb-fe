@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form';
 
 import { ProfileFormValues, profileSchema } from '../../schemas';
 
+import { ProfileImageInput } from './ProfileImageInput';
+
 import {
   Button,
   Form,
@@ -80,42 +82,18 @@ export function ProfileForm({
         onSubmit={form.handleSubmit(handleFormSubmit)}
         className="mx-auto flex w-full max-w-sm flex-col items-center space-y-8 py-6"
       >
-        <div className="relative">
-          <div
-            onClick={() => !isSubmittingForm && triggerInput()}
-            className={`h-32 w-32 overflow-hidden rounded-full border-2 bg-gray-200 ${
-              isSubmittingForm
-                ? 'cursor-not-allowed opacity-70'
-                : 'cursor-pointer'
-            } ${form.formState.errors.profile_image ? 'border-destructive' : 'border-gray-300'}`}
-          >
-            {preview ? (
-              <img
-                src={preview as string}
-                alt="프로필 이미지"
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center text-gray-500">
-                {isSubmittingForm && isUploading ? '업로드중...' : '사진 선택'}
-              </div>
-            )}
-          </div>
-          <input
-            ref={inputRef}
-            type="file"
-            accept={acceptedTypes.join(',')}
-            className="hidden"
-            onChange={handleImageChange}
-            disabled={isSubmittingForm}
-          />
-        </div>
-        {form.formState.errors.profile_image?.message && (
-          <p className="text-destructive text-sm font-medium">
-            {form.formState.errors.profile_image?.message as string}
-          </p>
-        )}
-
+        <ProfileImageInput
+          preview={typeof preview === 'string' ? preview : null}
+          isUploading={isUploading}
+          triggerInput={triggerInput}
+          inputRef={inputRef}
+          acceptedTypes={acceptedTypes}
+          handleImageChange={handleImageChange}
+          isSubmitting={isSubmittingForm}
+          errorMessage={form.formState.errors.profile_image?.message as string}
+          isError={!!form.formState.errors.profile_image}
+          altText="프로필 이미지"
+        />
         <FormField
           control={form.control}
           name="username"
