@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import { Author } from '../../types';
 import { formatDateByType } from '../../utils';
 
@@ -16,9 +18,13 @@ export function AuthorInfo({ user, writtenAt }: AuthorInfoProps) {
   return (
     <div className="flex items-center gap-2 text-sm">
       <div className="flex items-center gap-3">
-        <UserAvatar imageUrl={profileImage ?? null} size="small" />
+        <Link href={`/users/${user.id}`}>
+          <UserAvatar imageUrl={profileImage ?? null} size="small" />
+        </Link>
         <div className="flex flex-col">
-          <span className="font-semibold text-gray-700">{nickname}</span>
+          <Link href={`/users/${user.id}`}>
+            <span className="font-semibold text-gray-700">{nickname}</span>
+          </Link>
           <span className="text-gray-500">
             {formatDateByType(writtenAt, 'relative')}
           </span>
