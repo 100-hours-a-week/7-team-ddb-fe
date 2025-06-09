@@ -1,20 +1,25 @@
-import Link from 'next/link';
-
 import { MomentItem } from './MomentItem';
 
 import { MomentListType } from '@/features/community/types';
 
 export interface MomentListProps {
   moments: MomentListType;
+  showAuthorInfo?: boolean;
+  emptyContainerClassName?: string;
 }
 
-export function MomentList({ moments }: MomentListProps) {
+export function MomentList({
+  moments,
+  showAuthorInfo = true,
+}: MomentListProps) {
   return (
     <div className="flex flex-col gap-2">
       {moments.map((moment) => (
-        <Link href={`/moments/${moment.id}`} key={moment.id}>
-          <MomentItem moment={moment} key={moment.id} />
-        </Link>
+        <MomentItem
+          moment={moment}
+          key={moment.id}
+          showAuthorInfo={showAuthorInfo}
+        />
       ))}
     </div>
   );
