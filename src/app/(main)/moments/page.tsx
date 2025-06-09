@@ -6,7 +6,7 @@ import {
 
 export default function Moments() {
   return (
-    <div className="overflow-y-auto pb-22">
+    <div className="h-full overflow-y-auto pb-22">
       <MomentList moments={dummyMomentListData} />
       <WriteMomentFab />
     </div>
