@@ -16,3 +16,4 @@ export * from './user-avatar';
 export * from './switch';
 export * from './dropdown-menu';
 export * from './sheet';
+export * from './tab';
