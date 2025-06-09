@@ -2,26 +2,23 @@
 
 import { useRouter } from 'next/navigation';
 
+import { PlaceItemType } from '../../types';
 import { KeywordList } from '../keyword-list';
 
 export interface PlaceItemProps {
-  id: number;
-  name: string;
-  thumbnail: string;
-  keywords: string[];
+  place: PlaceItemType;
   isClickable?: boolean;
   isDetailButton?: boolean;
 }
 
 export function PlaceItem({
-  id,
-  name,
-  thumbnail,
-  keywords,
+  place,
   isClickable,
   isDetailButton,
 }: PlaceItemProps) {
   const router = useRouter();
+  const { id, name, thumbnail, keywords } = place;
+
   const handleDetailClick = () => {
     router.push(`/places/${id}`);
   };
