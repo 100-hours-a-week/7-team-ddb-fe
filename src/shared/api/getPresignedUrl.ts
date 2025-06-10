@@ -1,9 +1,10 @@
 import { fetchApi } from '../lib/fetchApi';
+import { UploadType } from '../types';
 
 interface PresignedUrlRequestBody {
   file_name: string;
   content_type: string;
-  upload_type: 'profile';
+  upload_type: UploadType;
 }
 
 export interface PresignedUrlResponseData {
@@ -23,7 +24,7 @@ export interface PresignedUrlResponseData {
 export async function getPresignedUrl(
   fileName: string,
   contentType: string,
-  uploadType: 'profile',
+  uploadType: UploadType,
 ): Promise<PresignedUrlResponseData> {
   const requestBody: PresignedUrlRequestBody = {
     file_name: fileName,

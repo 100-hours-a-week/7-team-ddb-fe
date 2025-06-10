@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { UseFormReturn, FieldValues, Path } from 'react-hook-form';
 
-import { useImageUpload, UploadType } from './useImageUpload';
+import { UploadType } from '../types';
+
+import { useImageUpload } from './useImageUpload';
 
 interface UseImageInputProps<T extends FieldValues> {
   form: UseFormReturn<T>;

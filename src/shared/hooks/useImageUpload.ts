@@ -1,9 +1,9 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 
+import { UploadType } from '../types';
+
 import { getPresignedUrl, type PresignedUrlResponseData } from '@/shared/api';
 import { FetchApiError } from '@/shared/lib/fetchApi';
-
-export type UploadType = 'profile';
 
 interface UseImageUploadResult {
   uploadImage: (file: File, uploadType: UploadType) => Promise<string | null>;
