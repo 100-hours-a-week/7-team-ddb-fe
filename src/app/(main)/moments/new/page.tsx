@@ -1,16 +1,60 @@
 'use client';
 
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
 
 import {
   HeaderCheckButton,
   HeaderVisibilityToggle,
   MomentForm,
+  MomentFormValues,
+  postMoment,
 } from '@/features/community';
 import { Header } from '@/shared/components';
+import { useImageUpload, useToast } from '@/shared/hooks';
 
 export default function NewMomentPage() {
-  const [isPublic, setIsPublic] = useState(false);
+  const router = useRouter();
+  const { showErrorToast } = useToast();
+  const { uploadImage } = useImageUpload();
+
+  const formRef = useRef<HTMLFormElement>(null);
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
+
+  const handleSubmit = async (data: MomentFormValues) => {
+    setIsSubmittingForm(true);
+    try {
+      const imageUrls: string[] = [];
+      if (data.images && data.images.length > 0) {
+        const uploadPromises = data.images.map(async (image) => {
+          if (typeof image === 'string') {
+            return image;
+          }
+          const objectUrl = await uploadImage(image, 'moment');
+          if (!objectUrl) {
+            throw new Error(`이미지 업로드 실패: ${image.name}`);
+          }
+          return objectUrl;
+        });
+        const resolvedUrls = await Promise.all(uploadPromises);
+        imageUrls.push(...resolvedUrls);
+      }
+
+      const { id } = await postMoment({
+        ...data,
+        images: imageUrls,
+        is_public: isPublic,
+      });
+      router.push(`/moments/${id}`);
+    } catch (error) {
+      console.error(error);
+      showErrorToast('기록 생성에 실패했습니다.');
+    } finally {
+      setIsSubmittingForm(false);
+    }
+  };
+
   return (
     <div className="overflow-y-auto pb-22">
       <Header
@@ -22,21 +66,16 @@ export default function NewMomentPage() {
               onToggle={setIsPublic}
             />
             <HeaderCheckButton
-              onClick={() => console.log('clicked')}
-              disabled={false}
+              onClick={() => formRef.current?.requestSubmit()}
+              disabled={isSubmittingForm}
             />
           </div>
         }
       />
       <MomentForm
-        onSubmit={async (data) => {
-          console.log(data);
-          await Promise.resolve();
-        }}
-        placeInfo={{
-          place_id: '1',
-          place_name: '테스트',
-        }}
+        formRef={formRef}
+        isSubmittingForm={isSubmittingForm}
+        onSubmit={handleSubmit}
       />
     </div>
   );
