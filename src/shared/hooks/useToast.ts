@@ -31,7 +31,7 @@ export const useToast = () => {
     message: string,
     {
       position = 'bottom-center',
-      duration = 2000000,
+      duration = 2000,
       variant = 'default',
     }: ToastOptions = {},
   ) => {
