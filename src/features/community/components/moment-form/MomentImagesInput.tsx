@@ -2,13 +2,14 @@
 
 import { X } from 'lucide-react';
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/shared/components';
+import { useToast } from '@/shared/hooks';
 
 interface MomentImagesInputProps {
-  images?: File[];
-  onChange: (files: File[]) => void;
+  images?: (File | string)[];
+  onChange: (files: (File | string)[]) => void;
   maxFiles?: number;
   disabled?: boolean;
 }
@@ -20,11 +21,31 @@ export function MomentImagesInput({
   disabled = false,
 }: MomentImagesInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const { showErrorToast } = useToast();
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+
+  useEffect(() => {
+    const newImagePreviews = images.map((image) => {
+      if (typeof image === 'string') {
+        return image;
+      }
+      return URL.createObjectURL(image);
+    });
+    setImagePreviews(newImagePreviews);
+
+    return () => {
+      newImagePreviews.forEach((preview, i) => {
+        if (i < images.length && typeof images[i] !== 'string') {
+          URL.revokeObjectURL(preview);
+        }
+      });
+    };
+  }, [images]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (images.length + files.length > maxFiles) {
-      // TODO: 토스트 메시지로 알림
+      showErrorToast(`이미지는 최대 ${maxFiles}개까지 추가할 수 있습니다.`);
       return;
     }
     onChange([...images, ...files]);
@@ -40,11 +61,11 @@ export function MomentImagesInput({
     <div className="w-full space-y-4">
       <div className="relative">
         <div className="flex gap-4 overflow-x-auto pb-4">
-          {images.map((image, index) => (
+          {imagePreviews.map((imageUrl, index) => (
             <div key={index} className="relative flex-shrink-0">
               <div className="relative h-24 w-24 overflow-hidden rounded-lg">
                 <Image
-                  src={URL.createObjectURL(image)}
+                  src={imageUrl}
                   alt={`이미지 ${index + 1}`}
                   fill
                   className="object-cover"

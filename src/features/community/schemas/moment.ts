@@ -11,7 +11,7 @@ export const momentSchema = z.object({
     .max(2200, '2200자 이하로 입력해주세요'),
   place_id: z.string().optional(),
   place_name: z.string().optional(),
-  images: z.array(z.instanceof(File)).optional(),
+  images: z.array(z.union([z.instanceof(File), z.string()])).optional(),
   is_public: z.boolean(),
 });
 
