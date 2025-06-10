@@ -1,7 +1,6 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { MomentFormValues, momentSchema } from '../../schemas';
@@ -19,6 +18,8 @@ import {
 } from '@/shared/components';
 
 export interface MomentFormProps {
+  formRef: React.RefObject<HTMLFormElement | null>;
+  isSubmittingForm: boolean;
   onSubmit: (data: MomentFormValues) => Promise<void>;
   defaultValues?: Partial<MomentFormValues>;
   placeInfo?: {
@@ -28,12 +29,12 @@ export interface MomentFormProps {
 }
 
 export function MomentForm({
+  formRef,
+  isSubmittingForm,
   onSubmit,
   defaultValues,
   placeInfo,
 }: MomentFormProps) {
-  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
-
   const form = useForm<MomentFormValues>({
     resolver: zodResolver(momentSchema),
     defaultValues: {
@@ -46,23 +47,12 @@ export function MomentForm({
     },
   });
 
-  const handleFormSubmit = async (data: MomentFormValues) => {
-    setIsSubmittingForm(true);
-
-    try {
-      await onSubmit({ ...data });
-    } catch (error) {
-      console.error('Form submission error:', error);
-    } finally {
-      setIsSubmittingForm(false);
-    }
-  };
-
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleFormSubmit)}
-        className="mx-auto flex w-full max-w-sm flex-col items-center space-y-8 py-6"
+        ref={formRef}
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex w-full flex-col items-center space-y-8 px-6 py-6"
       >
         <FormField
           control={form.control}
