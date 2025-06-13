@@ -1,16 +1,38 @@
 'use client';
 
-import { CommentListType } from '../../types/comments';
+import { getComments } from '../../api';
+import { useInfiniteScroll } from '../../hooks';
+import { CommentItemType, CommentListType } from '../../types/comments';
 
 import { CommentItem } from './CommentItem';
 
+import { FullScreenMessage, LoadingSpinner } from '@/shared/components';
+
 interface CommentListProps {
-  comments: CommentListType;
-  onDelete: (id: string) => void;
+  momentId: number;
+  initialComments: CommentListType;
+  onDelete: (id: number) => void;
 }
 
-export function CommentList({ comments, onDelete }: CommentListProps) {
-  if (comments.length === 0) {
+export function CommentList({
+  momentId,
+  initialComments,
+  onDelete,
+}: CommentListProps) {
+  const { items, isLoading, hasError, targetRef } =
+    useInfiniteScroll<CommentItemType>({
+      initialData: initialComments,
+      fetchMore: async ({ limit, cursor }) => {
+        const newData = await getComments({
+          limit,
+          cursor,
+          momentId,
+        });
+        return newData;
+      },
+    });
+
+  if (items.length === 0) {
     return (
       <div className="text-muted-foreground flex h-32 items-center justify-center">
         아직 댓글이 없습니다.
@@ -20,9 +42,12 @@ export function CommentList({ comments, onDelete }: CommentListProps) {
 
   return (
     <div className="divide-y">
-      {comments.map((comment) => (
+      {items.map((comment) => (
         <CommentItem key={comment.id} comment={comment} onDelete={onDelete} />
       ))}
+      <div ref={targetRef} />
+      {isLoading && <LoadingSpinner className="h-24" />}
+      {hasError && <FullScreenMessage message="데이터 로드에 실패했습니다." />}
     </div>
   );
 }
