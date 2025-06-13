@@ -1,12 +1,21 @@
 import { PlaceDetail } from '../../types';
+import { BookmarkButton } from '../bookmark-button';
 
 export interface PlaceBasicInfoProps {
   placeBasicInfo: Omit<PlaceDetail, 'menu' | 'opening_hours'>;
 }
 
 export function PlaceBasicInfo({ placeBasicInfo }: PlaceBasicInfoProps) {
-  const { thumbnail, name, address, phone, keywords, description } =
-    placeBasicInfo;
+  const {
+    id,
+    thumbnail,
+    name,
+    address,
+    phone,
+    keywords,
+    description,
+    is_bookmarked,
+  } = placeBasicInfo;
   return (
     <>
       <div className="relative mb-6 aspect-square w-full overflow-hidden rounded-lg">
@@ -24,7 +33,14 @@ export function PlaceBasicInfo({ placeBasicInfo }: PlaceBasicInfoProps) {
           </div>
         )}
       </div>
-      <h1 className="heading-1 mb-4">{name}</h1>
+      <div className="flex justify-between">
+        <h1 className="heading-1 mb-4">{name}</h1>
+        <BookmarkButton
+          placeId={id}
+          initialIsBookmarked={is_bookmarked}
+          className=""
+        />
+      </div>
       <div className="mb-6">
         {address && <p className="body-text mb-2 text-gray-600">{address}</p>}
         {phone && <p className="body-text mb-2 text-gray-600">{phone}</p>}
