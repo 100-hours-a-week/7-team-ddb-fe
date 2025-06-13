@@ -1,3 +1,5 @@
+import { cookies } from 'next/headers';
+
 import {
   getPlaceDetail,
   PlaceBasicInfo,
@@ -14,8 +16,9 @@ export default async function PlaceDetailPage({
   params,
 }: PlaceDetailPageProps) {
   const { id } = await params;
+  const cookie = (await cookies()).toString();
 
-  const place = await getPlaceDetail(id);
+  const place = await getPlaceDetail({ placeId: id, cookie });
 
   if (!place) {
     return (
