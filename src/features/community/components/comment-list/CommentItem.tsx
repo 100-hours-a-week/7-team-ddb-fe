@@ -9,7 +9,7 @@ import { UserAvatar } from '@/shared/components';
 
 interface CommentItemProps {
   comment: CommentItemType;
-  onDelete: (id: string) => void;
+  onDelete: (id: number) => void;
 }
 
 export function CommentItem({ comment, onDelete }: CommentItemProps) {

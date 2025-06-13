@@ -9,8 +9,8 @@ import {
 } from '@/shared/components';
 
 interface CommentOwnerDropDownProps {
-  onDelete: (id: string) => void;
-  id: string;
+  onDelete: (id: number) => void;
+  id: number;
 }
 
 export function CommentOwnerDropDown({
