@@ -23,7 +23,7 @@ export interface MomentFormProps {
   onSubmit: (data: MomentFormValues) => Promise<void>;
   defaultValues?: Partial<MomentFormValues>;
   placeInfo?: {
-    place_id: string;
+    place_id: number;
     place_name: string;
   };
 }
@@ -40,8 +40,8 @@ export function MomentForm({
     defaultValues: {
       title: defaultValues?.title || '',
       content: defaultValues?.content || '',
-      place_id: defaultValues?.place_id || '',
-      place_name: defaultValues?.place_name || '',
+      place_id: defaultValues?.place_id || undefined,
+      place_name: defaultValues?.place_name || undefined,
       images: defaultValues?.images || [],
       is_public: defaultValues?.is_public || false,
     },
@@ -65,7 +65,7 @@ export function MomentForm({
               </FormLabel>
               <Input
                 placeholder="제목을 입력하세요"
-                maxLength={10}
+                maxLength={50}
                 {...field}
                 className="input-text"
                 disabled={isSubmittingForm}
