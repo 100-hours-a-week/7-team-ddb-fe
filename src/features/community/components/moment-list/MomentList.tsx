@@ -1,26 +1,46 @@
+'use client';
+
+import { getMoments } from '../../api';
+import { useInfiniteScroll } from '../../hooks';
+
 import { MomentItem } from './MomentItem';
 
-import { MomentListType } from '@/features/community/types';
+import {
+  MomentItemType,
+  MomentListType,
+  MomentType,
+} from '@/features/community/types';
+import { FullScreenMessage, LoadingSpinner } from '@/shared/components';
 
 export interface MomentListProps {
-  moments: MomentListType;
-  showAuthorInfo?: boolean;
-  emptyContainerClassName?: string;
+  type: MomentType;
+  initialMoments: MomentListType;
+  userId?: number;
 }
 
-export function MomentList({
-  moments,
-  showAuthorInfo = true,
-}: MomentListProps) {
+export function MomentList({ type, initialMoments, userId }: MomentListProps) {
+  const { items, isLoading, hasError, targetRef } =
+    useInfiniteScroll<MomentItemType>({
+      initialData: initialMoments,
+      fetchMore: async ({ limit, cursor }) => {
+        const newData = await getMoments({
+          limit,
+          cursor,
+          type,
+          userId,
+        });
+        return newData;
+      },
+    });
+
   return (
     <div className="flex flex-col gap-2">
-      {moments.map((moment) => (
-        <MomentItem
-          moment={moment}
-          key={moment.id}
-          showAuthorInfo={showAuthorInfo}
-        />
+      {items.map((moment) => (
+        <MomentItem moment={moment} key={moment.id} />
       ))}
+      <div ref={targetRef} />
+      {isLoading && <LoadingSpinner className="h-24" />}
+      {hasError && <FullScreenMessage message="데이터 로드에 실패했습니다." />}
     </div>
   );
 }
