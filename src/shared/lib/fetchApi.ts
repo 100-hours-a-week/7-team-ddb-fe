@@ -68,6 +68,12 @@ export async function fetchApi<T = unknown>(
 
   try {
     const response = await fetch(url, config);
+
+    if (response.status === 204) {
+      console.log(`API Success: Status 204 No Content`);
+      return null as T;
+    }
+
     let responseBody: ApiResponse<T>;
 
     console.log('response', response);
