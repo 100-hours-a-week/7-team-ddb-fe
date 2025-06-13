@@ -2,6 +2,7 @@ import { EyeIcon, LockIcon, MessageCircleIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { MomentItemType } from '../../types';
+import { truncateText } from '../../utils';
 import { AuthorInfo } from '../author-info';
 
 export interface CommunityMomentItemProps {
@@ -42,8 +43,12 @@ export function CommunityMomentItem({ moment }: CommunityMomentItemProps) {
         <div className="flex flex-col gap-3 px-4 py-3">
           <div className="flex flex-row justify-between gap-2">
             <div className="flex-1">
-              <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
-              <p className="mt-1 text-sm text-gray-600">{content}</p>
+              <h3 className="text-xl font-semibold text-gray-800">
+                {truncateText(title, 20)}
+              </h3>
+              <p className="mt-1 text-sm text-gray-600">
+                {truncateText(content, 80)}
+              </p>
             </div>
             {thumbnail && (
               <div className="h-32 w-32 shrink-0 overflow-hidden rounded-2xl bg-gray-100">

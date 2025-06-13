@@ -2,7 +2,7 @@ import { EyeIcon, LockIcon, MessageCircleIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { MomentItemType } from '../../types';
-import { formatDateByType } from '../../utils';
+import { formatDateByType, truncateText } from '../../utils';
 
 export interface ProfileMomentItemProps {
   moment: MomentItemType;
@@ -38,9 +38,11 @@ export function ProfileMomentItem({ moment }: ProfileMomentItemProps) {
                 {formatDateByType(createdAt, 'relative')}
               </div>
               <h3 className="mt-1 text-xl font-semibold text-gray-800">
-                {title}
+                {truncateText(title, 15)}
               </h3>
-              <p className="mt-1 text-sm text-gray-600">{content}</p>
+              <p className="mt-1 text-sm text-gray-600">
+                {truncateText(content, 80)}
+              </p>
             </div>
             {thumbnail && (
               <div className="h-32 w-32 shrink-0 overflow-hidden rounded-2xl bg-gray-100">
