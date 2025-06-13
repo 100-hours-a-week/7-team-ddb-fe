@@ -5,7 +5,7 @@ import { Place } from '../../types';
 
 export interface MomentDetailContentProps {
   content: string;
-  place?: Place;
+  place: Place | null;
 }
 
 export function MomentDetailContent({
@@ -13,7 +13,7 @@ export function MomentDetailContent({
   place,
 }: MomentDetailContentProps) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="my-7 flex flex-col gap-2">
       <div className="break-after-auto text-sm">{content}</div>
       {place && (
         <div className="bg-card mt-4 rounded-lg border p-4">

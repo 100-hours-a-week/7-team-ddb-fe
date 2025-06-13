@@ -1,7 +1,6 @@
 'use client';
 
 import { X } from 'lucide-react';
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/shared/components';
@@ -64,11 +63,10 @@ export function MomentImagesInput({
           {imagePreviews.map((imageUrl, index) => (
             <div key={index} className="relative flex-shrink-0">
               <div className="relative h-24 w-24 overflow-hidden rounded-lg">
-                <Image
+                <img
                   src={imageUrl}
                   alt={`이미지 ${index + 1}`}
-                  fill
-                  className="object-cover"
+                  className="h-full w-full object-cover"
                 />
               </div>
               <Button

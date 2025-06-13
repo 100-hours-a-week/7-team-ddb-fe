@@ -26,7 +26,7 @@ export function MomentImageSlider({ images }: MomentImageSliderProps) {
   if (images.length === 0) return null;
 
   return (
-    <div className="relative my-5 flex justify-center">
+    <div className="relative mt-5 flex justify-center">
       <div className="relative h-92 w-92 overflow-hidden">
         <div
           className="flex transition-transform duration-300 ease-in-out"
