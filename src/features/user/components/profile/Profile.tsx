@@ -17,7 +17,7 @@ export function Profile({
     <div className="flex flex-col items-center px-4 py-6">
       <UserAvatar imageUrl={profileImage} size="large" />
       <h1 className="heading-2 mt-4 mb-2">{username}</h1>
-      <p className="body-text mb-4 text-center whitespace-pre-line text-gray-600">
+      <p className="body-text mb-4 px-4 text-center break-keep whitespace-pre-line text-gray-600">
         {introduction}
       </p>
     </div>

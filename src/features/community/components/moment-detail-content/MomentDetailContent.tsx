@@ -14,7 +14,7 @@ export function MomentDetailContent({
 }: MomentDetailContentProps) {
   return (
     <div className="my-7 flex flex-col gap-2">
-      <div className="break-after-auto text-sm">{content}</div>
+      <div className="text-sm">{content}</div>
       {place && (
         <div className="bg-card mt-4 rounded-lg border p-4">
           <div className="flex items-center gap-2">
