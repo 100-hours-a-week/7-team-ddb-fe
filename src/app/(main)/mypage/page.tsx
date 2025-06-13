@@ -1,25 +1,34 @@
-'use client';
+import { cookies } from 'next/headers';
 
-import { dummyMomentListData, MomentList } from '@/features/community';
-import { dummyPlaceItemData, PlaceList } from '@/features/place';
+import { getMoments, MomentList } from '@/features/community';
+import { getBookmarks, PlaceList } from '@/features/place';
 import {
+  getUser,
   Profile,
   ProfileSettingsSheet,
   ProfileTabs,
-  useUser,
 } from '@/features/user';
 import { FullScreenMessage, Header } from '@/shared/components';
 
-export default function MyPage() {
-  const { user } = useUser();
+export default async function MyPage() {
+  const cookie = (await cookies()).toString();
+  const user = await getUser(cookie);
 
   if (!user) {
     return <FullScreenMessage message="로딩중..." />;
   }
 
   const { username, profile_image, introduction } = user;
-  const moments = dummyMomentListData;
-  const places = dummyPlaceItemData;
+
+  const moments = await getMoments({
+    limit: 5,
+    cursor: null,
+    type: 'my',
+    cookie,
+  });
+  const { bookmarks } = await getBookmarks({
+    cookie,
+  });
 
   return (
     <div className="flex h-full flex-col">
@@ -35,12 +44,12 @@ export default function MyPage() {
         <div className="flex flex-col items-center px-4 pt-4">
           <ProfileTabs
             momentContent={
-              moments.length > 0 ? (
-                <MomentList moments={moments} showAuthorInfo={false} />
+              moments.items.length > 0 ? (
+                <MomentList initialMoments={moments} type="my" />
               ) : null
             }
             bookmarkContent={
-              places.length > 0 ? <PlaceList places={places} /> : null
+              bookmarks.length > 0 ? <PlaceList places={bookmarks} /> : null
             }
           />
         </div>
