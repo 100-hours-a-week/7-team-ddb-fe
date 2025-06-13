@@ -13,7 +13,6 @@ export async function postMoment(
   params: CreateMomentRequest,
 ): Promise<CreateMomentResponse> {
   try {
-    console.log('params', params);
     const response = await fetchApi<CreateMomentResponse>(
       '/api/v1/users/moments',
       {
@@ -21,8 +20,6 @@ export async function postMoment(
         body: JSON.stringify(params),
       },
     );
-
-    console.log(response);
 
     return response;
   } catch (error) {
