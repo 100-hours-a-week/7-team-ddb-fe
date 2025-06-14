@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import { CommentItemType } from '../../types/comments';
 import { formatDateByType } from '../../utils';
 
@@ -18,13 +20,15 @@ export function CommentItem({ comment, onDelete }: CommentItemProps) {
 
   return (
     <div className="flex gap-3 p-4">
-      <div>
+      <Link href={`/users/${user.id}`}>
         <UserAvatar imageUrl={user.profileImage} size="small" />
-      </div>
+      </Link>
       <div className="flex-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="font-medium">{user.nickname}</span>
+            <Link href={`/users/${user.id}`}>
+              <span className="font-medium">{user.nickname}</span>
+            </Link>
             <span className="text-muted-foreground text-sm">
               {formattedDate}
             </span>
