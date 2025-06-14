@@ -50,7 +50,7 @@ function formatRelativeDate(isoString: string): string {
 
   const diffMs = now.getTime() - target.getTime();
   if (diffMs < 0) {
-    return formatDefaultDate(isoString);
+    return '방금 전';
   }
 
   const minuteMs = 60 * 1000;
