@@ -25,7 +25,7 @@ export function MomentDetailOwnerDropdown({
   const { showSuccessToast, showErrorToast } = useToast();
 
   const handleEdit = () => {
-    router.push(`/moments/${momentId}/edit`);
+    router.replace(`/moments/${momentId}/edit`);
   };
 
   const handleDelete = async () => {

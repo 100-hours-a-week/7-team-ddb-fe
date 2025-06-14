@@ -5,7 +5,14 @@ import { useRouter } from 'next/navigation';
 
 import { Button } from '@/shared/components';
 
-export function WriteMomentFab() {
+interface WriteMomentFabProps {
+  place?: {
+    id: number;
+    name: string;
+  };
+}
+
+export function WriteMomentFab({ place }: WriteMomentFabProps) {
   const router = useRouter();
 
   return (
@@ -15,7 +22,11 @@ export function WriteMomentFab() {
           size="icon"
           className="mr-5 h-14 w-14 rounded-full bg-rose-300 shadow-lg hover:bg-rose-400"
           onClick={() => {
-            router.push('/moments/new');
+            router.replace(
+              place
+                ? `/moments/new?placeId=${place.id}&placeName=${place.name}`
+                : '/moments/new',
+            );
           }}
         >
           <ChatPlusInSolid className="size-6" />

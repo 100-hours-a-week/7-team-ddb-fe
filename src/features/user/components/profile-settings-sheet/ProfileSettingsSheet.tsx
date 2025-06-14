@@ -54,7 +54,7 @@ export function ProfileSettingsSheet() {
         </SheetHeader>
         <nav className="mt-4 flex flex-col gap-5 px-8">
           {menuItems.map((item) => (
-            <Link key={item.href} href={item.href} passHref>
+            <Link key={item.href} href={item.href} replace>
               <Button
                 variant="ghost"
                 className="w-full justify-start font-light"
