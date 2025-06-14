@@ -1,37 +1,28 @@
 'use client';
 
-import { getComments } from '../../api';
-import { useInfiniteScroll } from '../../hooks';
-import { CommentItemType, CommentListType } from '../../types/comments';
+import { RefObject } from 'react';
+
+import { CommentItemType } from '../../types/comments';
 
 import { CommentItem } from './CommentItem';
 
 import { FullScreenMessage, LoadingSpinner } from '@/shared/components';
 
 interface CommentListProps {
-  momentId: number;
-  initialComments: CommentListType;
+  items: CommentItemType[];
+  isLoading: boolean;
+  hasError: boolean;
+  targetRef: RefObject<HTMLDivElement | null>;
   onDelete: (id: number) => void;
 }
 
 export function CommentList({
-  momentId,
-  initialComments,
+  items,
+  isLoading,
+  hasError,
+  targetRef,
   onDelete,
 }: CommentListProps) {
-  const { items, isLoading, hasError, targetRef } =
-    useInfiniteScroll<CommentItemType>({
-      initialData: initialComments,
-      fetchMore: async ({ limit, cursor }) => {
-        const newData = await getComments({
-          limit,
-          cursor,
-          momentId,
-        });
-        return newData;
-      },
-    });
-
   if (items.length === 0) {
     return (
       <div className="text-muted-foreground flex h-32 items-center justify-center">

@@ -12,7 +12,7 @@ interface InfiniteScrollProps<T> {
   }) => Promise<InfiniteList<T>>;
 }
 
-export function useInfiniteScroll<T>({
+export function useInfiniteScroll<T extends { id: number | string }>({
   initialData,
   fetchMore,
 }: InfiniteScrollProps<T>) {
@@ -35,7 +35,38 @@ export function useInfiniteScroll<T>({
         cursor: pagination.nextCursor,
       });
 
-      setItems((prev) => [...prev, ...newData.items]);
+      setItems((prev) => {
+        const existingIds = new Set(prev.map((item) => item.id));
+        const uniqueNewItems = newData.items.filter(
+          (item) => !existingIds.has(item.id),
+        );
+        return [...prev, ...uniqueNewItems];
+      });
+      setPagination(newData.pagination);
+    } catch (error) {
+      console.error(error);
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const removeItem = (id: number | string) => {
+    setItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const addItem = (item: T) => {
+    setItems((prev) => [...prev, item]);
+  };
+
+  const refetch = async () => {
+    setIsLoading(true);
+    try {
+      const newData = await fetchMore({
+        limit: pagination.limit,
+        cursor: null,
+      });
+      setItems(newData.items);
       setPagination(newData.pagination);
     } catch (error) {
       console.error(error);
@@ -77,5 +108,8 @@ export function useInfiniteScroll<T>({
     isLoading,
     hasError,
     targetRef,
+    refetch,
+    removeItem,
+    addItem,
   };
 }
