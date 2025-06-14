@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-import { getMoments, MomentList } from '@/features/community';
+import { getMoments, INFINITE_SCROLL, MomentList } from '@/features/community';
 import { getBookmarks, PlaceList } from '@/features/place';
 import {
   getUser,
@@ -21,7 +21,7 @@ export default async function MyPage() {
   const { username, profile_image, introduction } = user;
 
   const moments = await getMoments({
-    limit: 5,
+    limit: INFINITE_SCROLL.MOMENTS_PER_PAGE,
     cursor: null,
     type: 'my',
     cookie,

@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-import { getMoments, MomentList } from '@/features/community';
+import { getMoments, INFINITE_SCROLL, MomentList } from '@/features/community';
 import { getUserById, Profile } from '@/features/user';
 import { FullScreenMessage, Header } from '@/shared/components';
 
@@ -13,7 +13,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   const { id } = await params;
   const user = await getUserById(Number(id));
   const moments = await getMoments({
-    limit: 5,
+    limit: INFINITE_SCROLL.MOMENTS_PER_PAGE,
     cursor: null,
     type: 'user',
     userId: Number(id),

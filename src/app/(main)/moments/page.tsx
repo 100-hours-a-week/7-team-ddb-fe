@@ -1,11 +1,16 @@
 import { cookies } from 'next/headers';
 
-import { getMoments, MomentList, WriteMomentFab } from '@/features/community';
+import {
+  getMoments,
+  INFINITE_SCROLL,
+  MomentList,
+  WriteMomentFab,
+} from '@/features/community';
 
 export default async function Moments() {
   const cookie = (await cookies()).toString();
   const moments = await getMoments({
-    limit: 5,
+    limit: INFINITE_SCROLL.MOMENTS_PER_PAGE,
     cursor: null,
     type: 'all',
     cookie,

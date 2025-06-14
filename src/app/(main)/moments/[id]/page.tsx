@@ -5,6 +5,7 @@ import {
   CommentSection,
   getComments,
   getMomentById,
+  INFINITE_SCROLL,
   MomentDetailContent,
   MomentDetailOwnerDropdown,
   MomentImageSlider,
@@ -22,7 +23,7 @@ export default async function MomentDetailPage({
   const cookie = (await cookies()).toString();
   const moment = await getMomentById(Number(id), cookie);
   const comments = await getComments({
-    limit: 5,
+    limit: INFINITE_SCROLL.COMMENTS_PER_PAGE,
     cursor: null,
     momentId: Number(id),
     cookie,
@@ -39,8 +40,8 @@ export default async function MomentDetailPage({
       <div className="mobile-width fixed top-0 z-10 flex">
         <Header showBackButton />
       </div>
-      <div className="flex-1 overflow-y-scroll">
-        <div className="mx-auto mb-4 p-4 px-7 pt-20 pb-22">
+      <div id="comment-scroll-container" className="flex-1 overflow-y-scroll">
+        <div className="mx-auto mb-22 p-4 px-7 pt-20">
           <div className="flex items-center justify-between">
             <AuthorInfo user={author} writtenAt={createdAt} />
             {isOwner && <MomentDetailOwnerDropdown momentId={moment.id} />}
