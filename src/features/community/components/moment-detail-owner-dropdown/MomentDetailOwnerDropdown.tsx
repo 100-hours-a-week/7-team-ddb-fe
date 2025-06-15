@@ -25,14 +25,14 @@ export function MomentDetailOwnerDropdown({
   const { showSuccessToast, showErrorToast } = useToast();
 
   const handleEdit = () => {
-    router.replace(`/moments/${momentId}/edit`);
+    router.push(`/moments/${momentId}/edit`);
   };
 
   const handleDelete = async () => {
     try {
       await deleteMoment(momentId);
       showSuccessToast('기록이 삭제되었습니다.');
-      router.push('/moments');
+      router.replace('/moments');
     } catch (error) {
       console.error(error);
       showErrorToast('기록 삭제에 실패했습니다.');

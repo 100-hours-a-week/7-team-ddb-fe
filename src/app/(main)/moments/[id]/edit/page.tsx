@@ -80,7 +80,7 @@ export default function EditMomentPage() {
         },
       });
       showSuccessToast('기록이 수정되었습니다.');
-      router.push(`/moments/${id}`);
+      router.replace(`/moments/${id}`);
     } catch (error) {
       console.error(error);
       showErrorToast('기록 수정에 실패했습니다.');
@@ -105,7 +105,6 @@ export default function EditMomentPage() {
             />
             <HeaderCheckButton
               onClick={() => {
-                console.log('requestSubmit');
                 formRef.current?.requestSubmit();
               }}
               disabled={isSubmittingForm}

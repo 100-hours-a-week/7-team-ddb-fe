@@ -19,7 +19,7 @@ export default function MyPage() {
       ...data,
     });
 
-    router.push('/mypage');
+    router.replace('/mypage');
   };
 
   return (

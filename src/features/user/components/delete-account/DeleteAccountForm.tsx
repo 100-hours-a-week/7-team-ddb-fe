@@ -14,7 +14,7 @@ export function DeleteAccountForm() {
 
   const handleDelete = async () => {
     await deleteUser();
-    router.push('/onboarding');
+    router.replace('/onboarding');
   };
 
   return (
