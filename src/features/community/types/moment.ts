@@ -2,7 +2,7 @@ import { InfiniteList } from '@/shared/types';
 
 export type MomentListType = InfiniteList<MomentItemType>;
 
-export type MomentType = 'all' | 'my' | 'user';
+export type MomentType = 'all' | 'my' | 'user' | 'place';
 export interface MomentItemType {
   id: number;
   title: string;

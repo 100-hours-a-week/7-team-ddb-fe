@@ -8,6 +8,7 @@ interface getMomentsParams {
   type: MomentType;
   userId?: number;
   cookie?: string;
+  placeId?: number;
 }
 
 interface MomentListResponse {
@@ -47,7 +48,7 @@ interface MomentListResponse {
 export async function getMoments(
   params: getMomentsParams,
 ): Promise<MomentListType> {
-  const { limit, cursor, type, userId, cookie } = params;
+  const { limit, cursor, type, userId, cookie, placeId } = params;
   const queryParams = new URLSearchParams({
     limit: String(limit),
   });
@@ -63,6 +64,8 @@ export async function getMoments(
     endpoint = `/api/v1/users/${userId}/moments`;
   } else if (type === 'user' && !userId) {
     throw new Error('userId is required for user moment type');
+  } else if (type === 'place' && placeId) {
+    endpoint = `/api/v1/places/${placeId}/moments`;
   }
 
   try {
@@ -84,7 +87,7 @@ export async function getMoments(
         viewCount: moment.view_count,
         commentCount: moment.comment_count,
         author:
-          type === 'all'
+          type === 'all' || type === 'place'
             ? {
                 id: moment.author.id,
                 nickname: moment.author.nickname,
