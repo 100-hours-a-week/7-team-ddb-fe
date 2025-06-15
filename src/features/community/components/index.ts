@@ -10,3 +10,4 @@ export * from './comment-list';
 export * from './comment-input';
 export * from './comment-section';
 export * from './moment-detail-owner-dropdown';
+export * from './place-moment-section';
