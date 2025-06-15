@@ -1,5 +1,6 @@
 import { DataTransferBoth } from 'iconoir-react';
 
+import { SORT_OPTIONS } from '../../constants';
 import { SearchType, SortType } from '../../types';
 
 import {
@@ -28,11 +29,13 @@ export function PlaceSortSelect({
         <SelectValue />
       </SelectTrigger>
       <SelectContent className="w-[120px]">
-        <SelectItem value="distance">거리순</SelectItem>
-        {searchType === 'freeform' && (
-          <SelectItem value="similarity">유사도순</SelectItem>
-        )}
-        <SelectItem value="popularity">인기순</SelectItem>
+        {SORT_OPTIONS.filter(
+          (option) => !option.isVisible || option.isVisible(searchType),
+        ).map((option) => (
+          <SelectItem key={option.value} value={option.value}>
+            {option.label}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
