@@ -81,7 +81,7 @@ export function PlaceListBottomSheet({ places }: PlaceListBottomSheetProps) {
             <div className="space-y-8">
               {sortedPlaces.map((place) => (
                 <div key={place.id} className="border-b border-zinc-200 pb-8">
-                  <PlaceItem key={place.id} place={place} isClickable />
+                  <PlaceItem place={place} isClickable />
                 </div>
               ))}
             </div>
