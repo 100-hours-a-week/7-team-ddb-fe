@@ -16,26 +16,29 @@ export const useBottomSheetStore = create<BottomSheetState>((set) => ({
   setLastPlaceId: (lastPlaceId) => set({ lastPlaceId }),
   setSortType: (sortType) => set({ sortType }),
   resetForNewSearch: (searchType: SearchType) => {
-    if (searchType === 'category') {
-      set({
-        opened: 'list',
-        prevSnap: null,
-        scrollY: 0,
-        lastPlaceId: null,
-        sortType: 'distance',
-        searchType: 'category',
-      });
-    }
-
-    if (searchType === 'freeform') {
-      set({
-        opened: 'list',
-        prevSnap: null,
-        scrollY: 0,
-        lastPlaceId: null,
-        sortType: 'similarity',
-        searchType: 'freeform',
-      });
+    switch (searchType) {
+      case 'category':
+        set({
+          opened: 'list',
+          prevSnap: null,
+          scrollY: 0,
+          lastPlaceId: null,
+          sortType: 'distance',
+          searchType: 'category',
+        });
+        break;
+      case 'freeform':
+        set({
+          opened: 'list',
+          prevSnap: null,
+          scrollY: 0,
+          lastPlaceId: null,
+          sortType: 'similarity',
+          searchType: 'freeform',
+        });
+        break;
+      default:
+        throw new Error('Invalid search type');
     }
   },
 }));
