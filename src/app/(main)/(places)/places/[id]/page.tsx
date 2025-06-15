@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 
+import { PlaceMomentSection, WriteMomentFab } from '@/features/community';
 import {
   getPlaceDetail,
   PlaceBasicInfo,
@@ -43,8 +44,10 @@ export default async function PlaceDetailPage({
           <PlaceBasicInfo placeBasicInfo={placeBasicInfo} />
           {!isOpenHoursEmpty && <PlaceOpenHours openHours={opening_hours} />}
           {!isMenuEmpty && <PlaceMenu menu={menu} />}
+          <PlaceMomentSection placeId={Number(id)} />
         </div>
       </div>
+      <WriteMomentFab place={place} />
     </div>
   );
 }
