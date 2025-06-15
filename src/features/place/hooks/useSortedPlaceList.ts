@@ -7,22 +7,21 @@ export interface UseSortedPlaceListProps {
   sortType: SortType;
 }
 
+const sorters: Record<SortType, (a: Place, b: Place) => number> = {
+  distance: (a, b) => a.distance - b.distance,
+  similarity: (a, b) => b.similarity_score - a.similarity_score,
+  popularity: (a, b) => b.moment_count - a.moment_count,
+};
+
 export function useSortedPlaceList({
   places,
   sortType,
 }: UseSortedPlaceListProps) {
   return useMemo(() => {
-    const copied = [...places];
+    const placesCopy = [...places];
+    const comparator = sorters[sortType] ?? (() => 0);
+    placesCopy.sort(comparator);
 
-    switch (sortType) {
-      case 'distance':
-        return copied.sort((a, b) => a.distance - b.distance);
-      case 'similarity':
-        return copied.sort((a, b) => b.similarity_score - a.similarity_score);
-      case 'popularity':
-        return copied.sort((a, b) => b.moment_count - a.moment_count);
-      default:
-        return copied;
-    }
+    return placesCopy;
   }, [places, sortType]);
 }
