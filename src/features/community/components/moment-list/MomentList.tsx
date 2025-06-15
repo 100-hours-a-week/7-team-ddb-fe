@@ -16,9 +16,15 @@ export interface MomentListProps {
   type: MomentType;
   initialMoments: MomentListType;
   userId?: number;
+  placeId?: number;
 }
 
-export function MomentList({ type, initialMoments, userId }: MomentListProps) {
+export function MomentList({
+  type,
+  initialMoments,
+  userId,
+  placeId,
+}: MomentListProps) {
   const { items, isLoading, hasError, targetRef } =
     useInfiniteScroll<MomentItemType>({
       initialData: initialMoments,
@@ -28,6 +34,7 @@ export function MomentList({ type, initialMoments, userId }: MomentListProps) {
           cursor,
           type,
           userId,
+          placeId,
         });
         return newData;
       },
