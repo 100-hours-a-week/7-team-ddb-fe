@@ -22,10 +22,6 @@ export interface MomentFormProps {
   isSubmittingForm: boolean;
   onSubmit: (data: MomentFormValues) => Promise<void>;
   defaultValues?: Partial<MomentFormValues>;
-  placeInfo?: {
-    place_id: number;
-    place_name: string;
-  };
 }
 
 export function MomentForm({
@@ -33,7 +29,6 @@ export function MomentForm({
   isSubmittingForm,
   onSubmit,
   defaultValues,
-  placeInfo,
 }: MomentFormProps) {
   const form = useForm<MomentFormValues>({
     resolver: zodResolver(momentSchema),
@@ -75,7 +70,7 @@ export function MomentForm({
           )}
         />
 
-        {placeInfo && (
+        {defaultValues?.place_id && (
           <FormField
             control={form.control}
             name="place_id"
@@ -85,7 +80,7 @@ export function MomentForm({
                 <Input
                   placeholder="장소를 입력하세요"
                   {...field}
-                  value={placeInfo.place_name}
+                  value={defaultValues.place_name}
                   disabled
                 />
               </FormItem>

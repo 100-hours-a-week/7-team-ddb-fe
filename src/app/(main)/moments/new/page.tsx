@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
 
 import {
@@ -15,6 +15,11 @@ import { useImageUpload, useToast } from '@/shared/hooks';
 
 export default function NewMomentPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const placeId = searchParams.get('placeId');
+  const placeName = searchParams.get('placeName');
+
   const { showErrorToast } = useToast();
   const { uploadImage } = useImageUpload();
 
@@ -43,10 +48,12 @@ export default function NewMomentPage() {
 
       const { id } = await postMoment({
         ...data,
+        place_id: placeId ? parseInt(placeId) : undefined,
+        place_name: placeName ?? undefined,
         images: imageUrls,
         is_public: isPublic,
       });
-      router.push(`/moments/${id}`);
+      router.replace(`/moments/${id}`);
     } catch (error) {
       console.error(error);
       showErrorToast('기록 생성에 실패했습니다.');
@@ -76,6 +83,10 @@ export default function NewMomentPage() {
         formRef={formRef}
         isSubmittingForm={isSubmittingForm}
         onSubmit={handleSubmit}
+        defaultValues={{
+          place_id: placeId ? parseInt(placeId) : undefined,
+          place_name: placeName ?? undefined,
+        }}
       />
     </div>
   );
