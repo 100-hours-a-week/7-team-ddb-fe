@@ -18,3 +18,4 @@ export * from './dropdown-menu';
 export * from './sheet';
 export * from './tab';
 export * from './loading-spinner';
+export * from './select';

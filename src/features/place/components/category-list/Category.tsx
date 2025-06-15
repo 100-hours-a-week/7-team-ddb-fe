@@ -13,7 +13,7 @@ export function Category({ category }: { category: string }) {
     router.push(
       `/search?category=${category}&lat=${DEFAULT_LATITUDE}&lng=${DEFAULT_LONGITUDE}`,
     );
-    resetForNewSearch();
+    resetForNewSearch('category');
   };
 
   return (
