@@ -12,3 +12,4 @@ export * from './comment-section';
 export * from './moment-detail-owner-dropdown';
 export * from './place-moment-section';
 export * from './moment-detail-client';
+export * from './new-moment-form';
