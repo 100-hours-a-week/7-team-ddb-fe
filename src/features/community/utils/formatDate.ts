@@ -1,3 +1,12 @@
+import {
+  getKSTDate,
+  format,
+  differenceInMinutes,
+  differenceInHours,
+  differenceInDays,
+  differenceInWeeks,
+} from '../../../shared/lib/date';
+
 export type DateFormatType = 'default' | 'detail' | 'relative';
 
 export function formatDateByType(
@@ -16,73 +25,43 @@ export function formatDateByType(
   }
 }
 
-function padZero(num: number, length = 2): string {
-  return num.toString().padStart(length, '0');
-}
-
 // 기본 날짜 표기
 function formatDefaultDate(isoString: string): string {
-  const date = new Date(isoString);
-  const year = date.getFullYear();
-  const month = padZero(date.getMonth() + 1);
-  const day = padZero(date.getDate());
-
-  return `${year}.${month}.${day}`;
+  const date = getKSTDate(isoString);
+  return format(date, 'yyyy.MM.dd');
 }
 
 // 기록 상세 페이지 표기
 function formatDetailDate(isoString: string): string {
-  const date = new Date(isoString);
-  const fullYear = date.getFullYear().toString();
-  const yy = fullYear.slice(-2);
-  const month = padZero(date.getMonth() + 1);
-  const day = padZero(date.getDate());
-  const hours = padZero(date.getHours());
-  const minutes = padZero(date.getMinutes());
-
-  return `${yy}.${month}.${day} ${hours}:${minutes}`;
+  const date = getKSTDate(isoString);
+  return format(date, 'yy.MM.dd HH:mm');
 }
 
 // 댓글·방문 기록용 상대 시간 표기
 function formatRelativeDate(isoString: string): string {
-  const now = new Date();
-  const target = new Date(isoString);
+  const target = getKSTDate(isoString);
+  const now = getKSTDate();
 
-  const diffMs = now.getTime() - target.getTime();
-  if (diffMs < 0) {
-    return '방금 전';
-  }
-
-  const minuteMs = 60 * 1000;
-  const hourMs = 60 * minuteMs;
-  const dayMs = 24 * hourMs;
-  const weekMs = 7 * dayMs;
-  const fourWeeksMs = 4 * weekMs;
-
-  if (diffMs < dayMs) {
-    if (diffMs < minuteMs) {
+  if (differenceInDays(now, target) < 1) {
+    if (differenceInMinutes(now, target) < 1) {
       return '방금 전';
     }
-    if (diffMs < hourMs) {
-      const minutes = Math.floor(diffMs / minuteMs);
+    if (differenceInHours(now, target) < 1) {
+      const minutes = differenceInMinutes(now, target);
       return `${minutes}분 전`;
     }
-
-    const hours = Math.floor(diffMs / hourMs);
+    const hours = differenceInHours(now, target);
     return `${hours}시간 전`;
   }
 
-  if (diffMs < weekMs) {
-    const days = Math.floor(diffMs / dayMs);
-    if (days === 1) {
-      return '어제';
-    }
-
+  if (differenceInWeeks(now, target) < 1) {
+    const days = differenceInDays(now, target);
+    if (days === 1) return '어제';
     return `${days}일 전`;
   }
 
-  if (diffMs < fourWeeksMs) {
-    const weeks = Math.floor(diffMs / weekMs);
+  if (differenceInWeeks(now, target) < 4) {
+    const weeks = differenceInWeeks(now, target);
     return `${weeks}주 전`;
   }
 
