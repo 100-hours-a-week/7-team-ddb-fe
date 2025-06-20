@@ -1,7 +1,9 @@
 'use client';
 
-import { Send } from 'lucide-react';
+import { Send, X } from 'lucide-react';
 import { useState } from 'react';
+
+import { useCommentStore } from '../../stores';
 
 import { Button, Input } from '@/shared/components';
 
@@ -15,9 +17,11 @@ export function CommentInput({
   placeholder = '댓글을 입력하세요...',
 }: CommentInputProps) {
   const [content, setContent] = useState('');
+  const { replyState, cancelReply } = useCommentStore();
 
   const handleSubmit = () => {
     if (!content.trim()) return;
+
     onSubmit(content);
     setContent('');
   };
@@ -31,22 +35,39 @@ export function CommentInput({
   };
 
   return (
-    <div className="bg-background mobile-width fixed bottom-20 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 border-t p-4 pb-7">
-      <Input
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder={placeholder}
-        className="flex-1"
-      />
-      <Button
-        onClick={handleSubmit}
-        disabled={!content.trim()}
-        size="icon"
-        variant="ghost"
-      >
-        <Send className="h-5 w-5" />
-      </Button>
+    <div className="mobile-width fixed bottom-20 left-1/2 z-10 -translate-x-1/2 bg-white px-4 py-3 pb-7">
+      {replyState.isReplying && (
+        <div className="flex items-center pb-2 pl-2">
+          <p className="text-muted-foreground">
+            {replyState.targetUserNickname}님에게 답글 남기는 중 ...
+          </p>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full"
+            onClick={cancelReply}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
+      <div className="bg-background flex items-center gap-2">
+        <Input
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          className="flex-1"
+        />
+        <Button
+          onClick={handleSubmit}
+          disabled={!content.trim()}
+          size="icon"
+          variant="ghost"
+        >
+          <Send className="h-5 w-5" />
+        </Button>
+      </div>
     </div>
   );
 }
