@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
+import { useCommentStore } from '../../stores';
 import { CommentListType, MomentDetail } from '../../types';
 
 import {
@@ -25,10 +26,13 @@ export function MomentDetailClient({
 }: MomentDetailClientProps) {
   const router = useRouter();
   const { previousPath, setPreviousPath } = useNavigationStore();
+  const { cancelReply } = useCommentStore();
 
   const { title, author, createdAt, images, content, place, isOwner } = moment;
 
   const handleBackClick = () => {
+    cancelReply();
+
     if (previousPath) {
       router.replace(previousPath);
       setPreviousPath(null);
