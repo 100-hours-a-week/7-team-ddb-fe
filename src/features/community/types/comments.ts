@@ -8,6 +8,7 @@ export interface CommentItemType {
   content: string;
   createdAt: string;
   isOwner: boolean;
+  parentCommentId: number | null;
 }
 
 export interface CommentUser {
