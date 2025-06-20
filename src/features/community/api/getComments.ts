@@ -17,6 +17,7 @@ interface GetCommentsResponse {
       nickname: string;
       profile_image: string | null;
     };
+    parent_comment_id: number | null;
     content: string;
     created_at: string;
     is_owner: boolean;
@@ -67,6 +68,7 @@ export async function getComments(
           nickname: comment.user.nickname,
           profileImage: comment.user.profile_image,
         },
+        parentCommentId: comment.parent_comment_id,
         content: comment.content,
         createdAt: comment.created_at,
         isOwner: comment.is_owner,
