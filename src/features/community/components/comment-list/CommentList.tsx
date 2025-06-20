@@ -31,10 +31,28 @@ export function CommentList({
     );
   }
 
+  const groupedComments = items.reduce(
+    (acc, comment) => {
+      if (!comment.parentCommentId) {
+        acc.push({
+          ...comment,
+          replies: items.filter((item) => item.parentCommentId === comment.id),
+        });
+      }
+      return acc;
+    },
+    [] as (CommentItemType & { replies: CommentItemType[] })[],
+  );
+
   return (
-    <div className="divide-y">
-      {items.map((comment) => (
-        <CommentItem key={comment.id} comment={comment} onDelete={onDelete} />
+    <div>
+      {groupedComments.map((comment) => (
+        <CommentItem
+          key={comment.id}
+          comment={comment}
+          onDelete={onDelete}
+          replies={comment.replies}
+        />
       ))}
       <div ref={targetRef} />
       {isLoading && <LoadingSpinner className="h-24" />}
