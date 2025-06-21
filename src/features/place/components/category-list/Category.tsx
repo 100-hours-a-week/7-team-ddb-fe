@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '../../constants';
 import { useBottomSheetStore } from '../../stores';
 
+import { Button } from '@/shared/components';
+
 export function Category({ category }: { category: string }) {
   const router = useRouter();
   const { resetForNewSearch } = useBottomSheetStore();
@@ -17,12 +19,13 @@ export function Category({ category }: { category: string }) {
   };
 
   return (
-    <button
+    <Button
       key={category}
-      className="label-text min-w-24 rounded-full bg-white py-2 shadow transition-all duration-150 hover:bg-gray-200"
+      variant="ghost"
+      className="label-text min-w-21 transform-gpu rounded-full bg-white shadow transition-all duration-150 hover:scale-105 hover:bg-rose-100"
       onClick={() => handleClick(category)}
     >
       {category}
-    </button>
+    </Button>
   );
 }
