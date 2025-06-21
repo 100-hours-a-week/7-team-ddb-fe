@@ -55,9 +55,12 @@ export function DeleteAccountForm() {
           id="agree"
           checked={isAgreed}
           onChange={(e) => setIsAgreed(e.target.checked)}
-          className="h-4 w-4 rounded border-gray-300"
+          className="h-4 w-4 cursor-pointer rounded border-gray-300"
         />
-        <label htmlFor="agree" className="body-text text-gray-600">
+        <label
+          htmlFor="agree"
+          className="body-text cursor-pointer text-gray-600"
+        >
           위 내용을 모두 확인하였으며, 탈퇴에 동의합니다.
         </label>
       </div>

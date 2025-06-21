@@ -7,6 +7,8 @@ import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '../../constants';
 import { useSearchBar } from '../../hooks/useSearchBar';
 import { useBottomSheetStore } from '../../stores';
 
+import { Button } from '@/shared/components';
+
 export interface SearchBarProps {
   initialQuery?: string;
   onSearch?: (query: string) => void;
@@ -47,12 +49,13 @@ export function SearchBar({
           className="focus:border-primary focus:ring-primary h-12 w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 pr-10 text-sm shadow-md transition-all duration-200 hover:shadow-lg focus:shadow-lg focus:ring-1 focus:outline-none"
           maxLength={25}
         />
-        <button
+        <Button
           type="submit"
+          variant="ghost"
           className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full p-2 hover:bg-gray-100"
         >
-          <Search className="h-5 w-5 text-gray-600" />
-        </button>
+          <Search className="size-5 text-gray-600" />
+        </Button>
       </div>
     </form>
   );

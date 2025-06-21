@@ -29,7 +29,10 @@ export function Header({
     <header className="flex h-16 w-full items-center justify-between border-b border-b-gray-200 bg-white px-4">
       <div className="flex items-center">
         {showBackButton && (
-          <button onClick={handleBackClick} className="flex items-center gap-2">
+          <button
+            onClick={handleBackClick}
+            className="flex cursor-pointer items-center gap-2"
+          >
             <NavArrowLeft className="h-6 w-6" />
           </button>
         )}

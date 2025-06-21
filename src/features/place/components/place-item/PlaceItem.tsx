@@ -6,6 +6,8 @@ import { PlaceItemType } from '../../types';
 import { BookmarkButton } from '../bookmark-button';
 import { KeywordList } from '../keyword-list';
 
+import { Button } from '@/shared/components';
+
 export interface PlaceItemProps {
   place: PlaceItemType;
   isClickable?: boolean;
@@ -58,12 +60,12 @@ export function PlaceItem({
         />
       </div>
       {isDetailButton && (
-        <button
+        <Button
           onClick={handleDetailClick}
-          className="bg-primary hover:bg-primary/90 focus:ring-primary/50 mt-6 w-full rounded-lg px-4 py-3 text-center text-sm font-medium text-white transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
+          className="bg-primary mt-4 h-11 w-full rounded-lg text-center text-sm font-medium text-white transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-none"
         >
           장소 상세보기
-        </button>
+        </Button>
       )}
     </div>
   );

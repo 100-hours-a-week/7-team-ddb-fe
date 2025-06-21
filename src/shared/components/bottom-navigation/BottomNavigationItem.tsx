@@ -20,7 +20,7 @@ export function BottomNavigationItem({
     <li className="flex w-24 flex-1 justify-center">
       <button
         onClick={onClick}
-        className="flex w-24 flex-col items-center justify-center"
+        className="flex w-24 cursor-pointer flex-col items-center justify-center"
       >
         {isCenter ? (
           <CenterButton
