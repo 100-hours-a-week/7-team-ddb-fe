@@ -57,7 +57,7 @@ export function CommentInput({
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="flex-1"
+          className="flex-1 text-sm"
         />
         <Button
           onClick={handleSubmit}
