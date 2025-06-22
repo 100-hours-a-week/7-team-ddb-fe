@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
 
-import { BackgroundPanel, FeedbackButton, Toaster } from '@/shared/components';
+import {
+  BackgroundPanel,
+  FeedbackButton,
+  GlobalConfirmDialog,
+  Toaster,
+} from '@/shared/components';
 import { pretendard } from '@/shared/fonts';
 import { QueryProvider } from '@/shared/providers';
 
@@ -31,6 +36,7 @@ export default function RootLayout({
             <main className="h-full w-full">
               {children}
               <Toaster />
+              <GlobalConfirmDialog />
             </main>
           </div>
         </QueryProvider>
