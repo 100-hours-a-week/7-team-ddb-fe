@@ -10,6 +10,7 @@ import { CommentInput } from '../comment-input/CommentInput';
 import { CommentList } from '../comment-list/CommentList';
 
 import { useToast } from '@/shared/hooks';
+import { useConfirmDialogStore } from '@/shared/store';
 
 interface CommentSectionProps {
   momentId: number;
@@ -41,6 +42,7 @@ export function CommentSection({
       return newData;
     },
   });
+  const openDialog = useConfirmDialogStore((s) => s.openDialog);
 
   const prevItemsLength = useRef(items.length);
 
@@ -109,6 +111,15 @@ export function CommentSection({
   };
 
   const handleDelete = async (id: number) => {
+    const ok = await openDialog({
+      title: '댓글 삭제',
+      description: '댓글을 삭제하시겠습니까?',
+      confirmText: '삭제',
+      cancelText: '취소',
+      confirmButtonClassName: 'bg-destructive text-white',
+    });
+
+    if (!ok) return;
     try {
       removeItem(id);
       await deleteComment(momentId, id);

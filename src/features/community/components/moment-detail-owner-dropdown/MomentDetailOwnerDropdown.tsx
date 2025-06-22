@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/components';
 import { useToast } from '@/shared/hooks';
+import { useConfirmDialogStore } from '@/shared/store';
 
 interface MomentDetailOwnerDropdownProps {
   momentId: number;
@@ -23,12 +24,23 @@ export function MomentDetailOwnerDropdown({
 }: MomentDetailOwnerDropdownProps) {
   const router = useRouter();
   const { showSuccessToast, showErrorToast } = useToast();
+  const openDialog = useConfirmDialogStore((s) => s.openDialog);
 
   const handleEdit = () => {
     router.push(`/moments/${momentId}/edit`);
   };
 
   const handleDelete = async () => {
+    const ok = await openDialog({
+      title: '기록 삭제',
+      description: '기록을 삭제하시겠습니까?',
+      confirmText: '삭제',
+      cancelText: '취소',
+      confirmButtonClassName: 'bg-destructive text-white',
+    });
+
+    if (!ok) return;
+
     try {
       await deleteMoment(momentId);
       showSuccessToast('기록이 삭제되었습니다.');

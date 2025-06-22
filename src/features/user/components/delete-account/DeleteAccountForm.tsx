@@ -6,13 +6,24 @@ import { useState } from 'react';
 import { deleteUser } from '../../api';
 
 import { Button } from '@/shared/components';
+import { useConfirmDialogStore } from '@/shared/store';
 
 export function DeleteAccountForm() {
   const router = useRouter();
-
+  const openDialog = useConfirmDialogStore((s) => s.openDialog);
   const [isAgreed, setIsAgreed] = useState(false);
 
   const handleDelete = async () => {
+    const ok = await openDialog({
+      title: '회원 탈퇴',
+      description: '회원 탈퇴를 진행하시겠습니까?',
+      confirmText: '탈퇴',
+      cancelText: '취소',
+      confirmButtonClassName: 'bg-destructive text-white',
+    });
+
+    if (!ok) return;
+
     await deleteUser();
     router.replace('/onboarding');
   };
