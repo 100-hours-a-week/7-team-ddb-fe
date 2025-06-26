@@ -7,3 +7,8 @@ export const testEnvironment = 'node';
 export const transform = {
   ...tsJestTransformCfg,
 };
+export const moduleNameMapper = {
+  '^@/(.*)$': '<rootDir>/src/$1',
+  '^@shared/(.*)$': '<rootDir>/src/shared/$1',
+  '^@features/(.*)$': '<rootDir>/src/features/$1',
+};
