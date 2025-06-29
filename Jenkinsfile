@@ -1,102 +1,34 @@
 pipeline {
     agent any
 
-    environment {
-        SERVICE_NAME    = 'frontend'
-        PROJECT_ID      = 'dolpin-2nd'
-        REGION          = 'asia-northeast3'
-        GAR_HOST        = 'asia-northeast3-docker.pkg.dev'
-        CONTAINER_NAME  = 'frontend'
-        PORT            = '3000'
-        SSH_KEY_PATH    = '/var/jenkins_home/.ssh/id_rsa'
-        SSH_USER        = 'peter'
+    environment { 
+        SERVICE_NAME     = 'frontend'
+        AWS_REGION       = 'ap-northeast-2' 
     }
 
     stages {
-        stage('Set Branch & Cron Trigger') {
-            steps {
-                script {
-                    def branchName = env.BRANCH_NAME ?: env.GIT_BRANCH?.replaceFirst(/^origin\//, '')
-                    env.BRANCH = branchName
-
-                    if (branchName == 'main') {
-                        properties([pipelineTriggers([cron('40 0 * * 1-5')])])
-                    } else if (branchName == 'dev') {
-                        properties([pipelineTriggers([
-                            cron('40 3 * * 1-4'),
-                            cron('40 23 * * 4'),
-                            cron('40 3 * * 6,7')
-                        ])])
-                    } else {
-                        properties([pipelineTriggers([])])
-                        echo "⛔ 지원되지 않는 브랜치입니다: ${branchName}. 빌드를 중단합니다."
-                        currentBuild.result = 'NOT_BUILT'
-                        error("Unsupported branch: ${branchName}")
-                    }
-                }
-            }
-        }
-
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Set Environment by Branch') {
+        stage('Set Branch') {
             steps {
                 script {
-                    if (env.BRANCH == 'main') {
-                        env.FE_PRIVATE_IP = '10.10.20.2'
-                        env.ENV_LABEL = 'prod'
-                        env.REPO_NAME = 'dolpin-docker-image-prod'
-                        env.API_BASE_CRED_ID = 'NEXT_PUBLIC_API_BASE_PROD'
-                    } else {
-                        env.FE_PRIVATE_IP = '10.20.20.2'
-                        env.ENV_LABEL = 'dev'
-                        env.REPO_NAME = 'dolpin-docker-image-dev'
-                        env.API_BASE_CRED_ID = 'NEXT_PUBLIC_API_BASE_DEV'
-                    } 
+                    def branch = env.BRANCH_NAME ?: env.GIT_BRANCH?.replaceFirst(/^origin\//, '').trim()
+                    def isMain = (branch == 'main')
+                    def envLabel = isMain ? 'prod' : 'dev'
 
-                    env.TAG = "${env.SERVICE_NAME}:${env.BUILD_NUMBER}"
-                    env.GAR_IMAGE = "${env.GAR_HOST}/${env.PROJECT_ID}/${env.REPO_NAME}/${env.TAG}"
-                }
-            }
-        }
-
-        stage('Check Infrastructure Availability') {
-            steps {
-                script {
-                    def sshStatus = sh(
-                        script: """
-                        ssh -i ${env.SSH_KEY_PATH} \
-                            -o BatchMode=yes \
-                            -o ConnectTimeout=15 \
-                            -o StrictHostKeyChecking=no \
-                            ${env.SSH_USER}@${env.FE_PRIVATE_IP} 'echo connected' >/dev/null 2>&1
-                        """,
-                        returnStatus: true
-                    )
-
-                    if (sshStatus != 0) {
-                        withCredentials([string(credentialsId: 'Discord-Webhook', variable: 'DISCORD')]) {
-                            discordSend(
-                                description: """
-                                ${env.SERVICE_NAME} - ${env.BRANCH} 브랜치 배포 중단됨
-                                이유: SSH 연결 실패 - ${env.FE_PRIVATE_IP}
-                                빌드 URL: ${env.BUILD_URL}
-                                """,
-                                link: env.BUILD_URL,
-                                result: 'FAILURE',
-                                title: "${env.JOB_NAME} : ${currentBuild.displayName} 실패 - 인프라 미구성",
-                                webhookURL: "$DISCORD"
-                            )
-                        }
-                        currentBuild.result = 'ABORTED'
-                        error("SSH connection failed. Infra not ready.")
-                    } else {
-                        echo "SSH 연결 성공: 인프라 확인 완료."
-                    }
+                    env.BRANCH = branch
+                    env.ENV_LABEL = envLabel
+                    env.API_BASE_CRED_ID = isMain ? 'NEXT_PUBLIC_API_BASE_PROD' : 'NEXT_PUBLIC_API_BASE_DEV'
+                    env.ECR_REPO = "794038223418.dkr.ecr.${env.AWS_REGION}.amazonaws.com/dolpin-${env.SERVICE_NAME}-${envLabel}"
+                    env.S3_BUCKET = "${envLabel}-dolpin-codedeploy-artifacts"
+                    env.IMAGE_TAG = "${env.BUILD_NUMBER}"
+                    env.ZIP_NAME = "${env.SERVICE_NAME}-${env.BUILD_NUMBER}.zip"
+                    env.APP_NAME = "${env.SERVICE_NAME}-${envLabel}-codedeploy-app"
+                    env.DEPLOYMENT_GROUP = "${env.SERVICE_NAME}-${envLabel}-deployment-group"
                 }
             }
         }
@@ -109,9 +41,9 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'Discord-Webhook', variable: 'DISCORD')]) {
                         discordSend(
-                            description: "🚀 배포가 곧 시작됩니다: ${env.SERVICE_NAME} - ${env.BRANCH} 브랜치",
+                            description: "🚀 빌드가 시작됩니다: ${env.SERVICE_NAME} - ${env.BRANCH} 브랜치",
                             link: env.BUILD_URL,
-                            title: "배포 시작",
+                            title: "빌드 시작",
                             webhookURL: "$DISCORD"
                         )
                     }
@@ -122,7 +54,6 @@ pipeline {
         stage('Load Secrets') {
             steps {
                 script {
-                    // Jenkins Credential Plugin을 통해 환경변수 로드
                     withCredentials([
                         string(credentialsId: "${env.API_BASE_CRED_ID}", variable: 'API_BASE_URL'),
                         string(credentialsId: 'NEXT_PUBLIC_KAKAOMAP_KEY', variable: 'KAKAOMAP_KEY')
@@ -134,72 +65,53 @@ pipeline {
             }
         }
 
-        stage('GAR 인증') {
+        stage('Docker Build & Push to ECR') {
             steps {
-                sh "gcloud auth configure-docker ${env.GAR_HOST} --quiet"
-            }
-        }
-
-        stage('Docker Build & Push to GAR') {
-            steps {
-                sh """
+                withAWS(credentials: 'aws-access-key', region: "${env.AWS_REGION}") {
+                    sh """
+                    aws ecr get-login-password | docker login --username AWS --password-stdin ${env.ECR_REPO}
                     docker build \
                       --build-arg NEXT_PUBLIC_API_BASE_URL=${env.API_BASE_URL} \
                       --build-arg NEXT_PUBLIC_KAKAOMAP_KEY=${env.KAKAOMAP_KEY} \
-                      -t ${env.GAR_IMAGE} .
-                    docker push ${env.GAR_IMAGE}
-                """
+                      -t ${env.ECR_REPO}:${env.IMAGE_TAG} .
+                    docker push ${env.ECR_REPO}:${env.IMAGE_TAG}
+                    """
+                }
             }
         }
 
-        stage('Deploy to FE via SSH') {
+        stage('Package for CodeDeploy') {
             steps {
                 script {
-                    def saCredId = env.BRANCH == 'main' ? 'fe-sa-key-prod' : 'fe-sa-key-dev'
-
-                    // GCP Secret Manager에서 서비스 계정 키 다운로드
                     sh """
-                    gcloud secrets versions access latest \
-                    --secret="${saCredId}" \
-                    --project="${env.PROJECT_ID}" > gcp-key.json
+                    mkdir -p deploy/scripts
+                    cp -r appspec.yml deploy/
+                    cp -r scripts/* deploy/scripts/
+                    echo ${env.IMAGE_TAG} > deploy/.image_tag
+                    cd deploy && zip -r ../${env.ZIP_NAME} .
                     """
+                }
+            }
+        }
 
-                    def deployScript = """
-#!/bin/bash
-set -e
+        stage('Upload to S3') {
+            steps {
+                withAWS(credentials: 'aws-access-key', region: "${env.AWS_REGION}") {
+                    sh "aws s3 cp ${env.ZIP_NAME} s3://${env.S3_BUCKET}/${env.ZIP_NAME}"
+                }
+            }
+        }
 
-export HOME=/home/${env.SSH_USER}
-
-mv /tmp/gcp-key.json \$HOME/gcp-key.json
-chown ${env.SSH_USER}:${env.SSH_USER} \$HOME/gcp-key.json
-chmod 600 \$HOME/gcp-key.json
-
-# 서비스 계정 인증 및 docker 인증
-gcloud auth activate-service-account --key-file="\$HOME/gcp-key.json"
-gcloud config set project ${env.PROJECT_ID} --quiet
-gcloud auth configure-docker ${env.GAR_HOST} --quiet
-gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://${env.GAR_HOST}
-
-sudo docker stop ${env.CONTAINER_NAME} || true
-sudo docker rm ${env.CONTAINER_NAME} || true
-
-docker pull ${env.GAR_IMAGE}
-
-sudo docker run -d --name ${env.CONTAINER_NAME} \\
-  -p ${env.PORT}:${env.PORT} \\
-  ${env.GAR_IMAGE}
-"""
-                    // Jenkins 워크스페이스에 배포 스크립트 파일 저장
-                    writeFile file: 'deploy.sh', text: deployScript
-                    sh "chmod 600 ${env.SSH_KEY_PATH}"
-                    
-                    // 키와 스크립트 전송 후 실행
+        stage('Trigger CodeDeploy') {
+            steps {
+                withAWS(credentials: 'aws-access-key', region: "${env.AWS_REGION}") {
                     sh """
-scp -i ${env.SSH_KEY_PATH} -o StrictHostKeyChecking=no gcp-key.json ${env.SSH_USER}@${env.FE_PRIVATE_IP}:/tmp/gcp-key.json
-scp -i ${env.SSH_KEY_PATH} -o StrictHostKeyChecking=no deploy.sh ${env.SSH_USER}@${env.FE_PRIVATE_IP}:/tmp/deploy.sh
-
-ssh -tt -i ${env.SSH_KEY_PATH} -o StrictHostKeyChecking=no ${env.SSH_USER}@${env.FE_PRIVATE_IP} "bash /tmp/deploy.sh"
-"""
+                    aws deploy create-deployment \
+                      --application-name ${env.APP_NAME} \
+                      --deployment-group-name ${env.DEPLOYMENT_GROUP} \
+                      --s3-location bucket=${env.S3_BUCKET},bundleType=zip,key=${env.ZIP_NAME} \
+                      --file-exists-behavior OVERWRITE
+                    """
                 }
             }
         }
@@ -211,9 +123,9 @@ ssh -tt -i ${env.SSH_KEY_PATH} -o StrictHostKeyChecking=no ${env.SSH_USER}@${env
                 if (env.BRANCH in ['main', 'dev']) {
                     withCredentials([string(credentialsId: 'Discord-Webhook', variable: 'DISCORD')]) {
                         discordSend description: """
-                        제목 : ${currentBuild.displayName}
-                        결과 : ${currentBuild.result}
+                        제목 : ${env.SERVICE_NAME}-${currentBuild.displayName} 빌드
                         실행 시간 : ${currentBuild.duration / 1000}s
+                        배포가 시작됩니다
                         """,
                         link: env.BUILD_URL, result: currentBuild.currentResult,
                         title: "${env.JOB_NAME} : ${currentBuild.displayName} 성공",
@@ -227,9 +139,9 @@ ssh -tt -i ${env.SSH_KEY_PATH} -o StrictHostKeyChecking=no ${env.SSH_USER}@${env
                 if (env.BRANCH in ['main', 'dev']) {
                     withCredentials([string(credentialsId: 'Discord-Webhook', variable: 'DISCORD')]) {
                         discordSend description: """
-                        제목 : ${currentBuild.displayName}
-                        결과 : ${currentBuild.result}
+                        제목 : ${env.SERVICE_NAME}-${currentBuild.displayName} 빌드
                         실행 시간 : ${currentBuild.duration / 1000}s
+                        빌드 오류 발생
                         """,
                         link: env.BUILD_URL, result: currentBuild.currentResult,
                         title: "${env.JOB_NAME} : ${currentBuild.displayName} 실패",
