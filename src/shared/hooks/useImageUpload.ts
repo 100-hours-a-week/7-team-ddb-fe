@@ -40,12 +40,13 @@ export function useImageUpload(): UseImageUploadResult {
         body: file,
         headers: {
           'Content-Type': file.type,
+          'x-amz-acl': 'bucket-owner-full-control',
         },
       });
 
       if (!uploadResponse.ok) {
         throw new Error(
-          `GCS 업로드 실패: ${uploadResponse.status} ${uploadResponse.statusText}`,
+          `S3 업로드 실패: ${uploadResponse.status} ${uploadResponse.statusText}`,
         );
       }
 
