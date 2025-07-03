@@ -145,12 +145,13 @@ export function createPlaceMarkers(
     minLevel: 2,
     gridSize: 40,
     disableClickZoom: true,
+    calculator: [10, 30, 50],
     styles: [
       {
         width: '50px',
         height: '50px',
         background:
-          'radial-gradient(circle, rgba(249, 206, 206, 0.9) 0%, rgba(249, 206, 206, 0.6) 70%, rgba(249, 206, 206, 0.2) 100%)',
+          'radial-gradient(circle, rgba(249, 231, 231, 0.9) 0%, rgba(249, 231, 231, 0.6) 70%, rgba(249, 231, 231, 0.2) 100%)',
         borderRadius: '50%',
         color: '#8B5A5A',
         textAlign: 'center',
@@ -162,7 +163,8 @@ export function createPlaceMarkers(
         width: '60px',
         height: '60px',
         background:
-          'radial-gradient(circle, rgba(249, 231, 231, 0.9) 0%, rgba(249, 231, 231, 0.6) 70%, rgba(249, 231, 231, 0.2) 100%)',
+          'radial-gradient(circle, rgba(249, 206, 206, 0.9) 0%, rgba(249, 206, 206, 0.6) 70%, rgba(249, 206, 206, 0.2) 100%)',
+
         borderRadius: '50%',
         color: '#8B5A5A',
         textAlign: 'center',
