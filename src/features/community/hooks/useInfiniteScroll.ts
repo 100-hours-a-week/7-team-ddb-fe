@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { QueryFunctionContext, useInfiniteQuery } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
 
 import { InfiniteList } from '@/shared/types';
 
@@ -10,106 +11,64 @@ interface InfiniteScrollProps<T> {
     limit: number;
     cursor: string | null;
   }) => Promise<InfiniteList<T>>;
+  queryKey?: unknown[];
 }
 
 export function useInfiniteScroll<T extends { id: number | string }>({
   initialData,
   fetchMore,
+  queryKey = ['infinite-scroll'],
 }: InfiniteScrollProps<T>) {
-  const [items, setItems] = useState(initialData.items);
-  const [pagination, setPagination] = useState(initialData.pagination);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    refetch,
+  } = useInfiniteQuery<InfiniteList<T>, Error>({
+    queryKey,
+    queryFn: ({ pageParam }: QueryFunctionContext) =>
+      fetchMore({
+        limit: initialData.pagination.limit,
+        cursor: pageParam as string | null,
+      }),
+    initialPageParam: null,
+    refetchOnMount: true,
+    getNextPageParam: (lastPage) => lastPage.pagination.nextCursor ?? undefined,
+    staleTime: 0,
+    gcTime: 1000 * 60 * 10,
+    initialData: {
+      pages: [initialData],
+      pageParams: [null],
+    },
+  });
 
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const items = data?.pages.flatMap((p) => p.items) ?? [];
+
   const targetRef = useRef<HTMLDivElement>(null);
-
-  const fetchNextPage = async () => {
-    if (isLoading || !pagination.hasNext) return;
-
-    setIsLoading(true);
-
-    try {
-      const newData = await fetchMore({
-        limit: pagination.limit,
-        cursor: pagination.nextCursor,
-      });
-
-      setItems((prev) => {
-        const existingIds = new Set(prev.map((item) => item.id));
-        const uniqueNewItems = newData.items.filter(
-          (item) => !existingIds.has(item.id),
-        );
-        return [...prev, ...uniqueNewItems];
-      });
-      setPagination(newData.pagination);
-    } catch (error) {
-      console.error(error);
-      setHasError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const removeItem = (id: number | string) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const addItem = (item: T) => {
-    setItems((prev) => [...prev, item]);
-  };
-
-  const refetch = async () => {
-    setIsLoading(true);
-    try {
-      const newData = await fetchMore({
-        limit: pagination.limit,
-        cursor: null,
-      });
-      setItems(newData.items);
-      setPagination(newData.pagination);
-    } catch (error) {
-      console.error(error);
-      setHasError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        if (entry.isIntersecting && pagination.hasNext && !isLoading) {
+    if (!targetRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
           fetchNextPage();
         }
       },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 1,
-      },
+      { root: null, rootMargin: '0px', threshold: 1 },
     );
 
-    if (targetRef.current) {
-      observerRef.current.observe(targetRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, [pagination.nextCursor, isLoading]);
+    observer.observe(targetRef.current);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return {
     items,
-    pagination,
     isLoading,
-    hasError,
+    hasError: isError,
     targetRef,
     refetch,
-    removeItem,
-    addItem,
   };
 }

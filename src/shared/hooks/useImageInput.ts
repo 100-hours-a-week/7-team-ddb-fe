@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useRef, useEffect, useCallback } from 'react';
 import type { UseFormReturn, FieldValues, Path } from 'react-hook-form';
 

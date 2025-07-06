@@ -3,8 +3,7 @@ import { cookies } from 'next/headers';
 import {
   getMoments,
   INFINITE_SCROLL,
-  MomentList,
-  WriteMomentFab,
+  MomentsClient,
 } from '@/features/community';
 
 export default async function Moments() {
@@ -16,10 +15,5 @@ export default async function Moments() {
     cookie,
   });
 
-  return (
-    <div className="h-full overflow-y-auto pb-22">
-      <MomentList initialMoments={moments} type="all" />
-      <WriteMomentFab />
-    </div>
-  );
+  return <MomentsClient initialMoments={moments} />;
 }
