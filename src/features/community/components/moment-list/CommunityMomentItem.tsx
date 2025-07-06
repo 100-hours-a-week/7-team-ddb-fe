@@ -1,4 +1,5 @@
 import { EyeIcon, LockIcon, MessageCircleIcon } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { MomentItemType } from '../../types';
@@ -52,10 +53,13 @@ export function CommunityMomentItem({ moment }: CommunityMomentItemProps) {
             </div>
             {thumbnail && (
               <div className="h-32 w-32 shrink-0 overflow-hidden rounded-2xl bg-gray-100">
-                <img
+                <Image
                   src={thumbnail}
                   alt={title}
+                  width={128}
+                  height={128}
                   className="h-full w-full object-cover"
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
             )}
