@@ -23,6 +23,7 @@ pipeline {
                     env.BRANCH = branch
                     env.ENV_LABEL = envLabel
                     env.API_BASE_CRED_ID = isMain ? 'NEXT_PUBLIC_API_BASE_PROD' : 'NEXT_PUBLIC_API_BASE_DEV'
+                    env.CDN_HOST_CRED_ID = isMain ? 'NEXT_PROD_CDN_HOST' : 'NEXT_DEV_CDN_HOST'
                     env.ECR_REPO = "794038223418.dkr.ecr.${env.AWS_REGION}.amazonaws.com/dolpin-${env.SERVICE_NAME}-${envLabel}"
                     env.S3_BUCKET = "${envLabel}-dolpin-codedeploy-artifacts"
                     env.IMAGE_TAG = "${env.BUILD_NUMBER}"
@@ -56,9 +57,11 @@ pipeline {
                 script {
                     withCredentials([
                         string(credentialsId: "${env.API_BASE_CRED_ID}", variable: 'API_BASE_URL'),
+                        string(credentialsId: "${env.CDN_HOST_CRED_ID}", variable: 'NEXT_PUBLIC_CDN_HOST'),
                         string(credentialsId: 'NEXT_PUBLIC_KAKAOMAP_KEY', variable: 'KAKAOMAP_KEY')
                     ]) {
                         env.API_BASE_URL = API_BASE_URL
+                        env.NEXT_PUBLIC_CDN_HOST = NEXT_PUBLIC_CDN_HOST
                         env.KAKAOMAP_KEY = KAKAOMAP_KEY
                     }
                 }
@@ -73,6 +76,7 @@ pipeline {
                     docker build \
                       --build-arg NEXT_PUBLIC_API_BASE_URL=${env.API_BASE_URL} \
                       --build-arg NEXT_PUBLIC_KAKAOMAP_KEY=${env.KAKAOMAP_KEY} \
+                      --build-arg NEXT_PUBLIC_CDN_HOST=${env.NEXT_PUBLIC_CDN_HOST} \
                       -t ${env.ECR_REPO}:${env.IMAGE_TAG} .
                     docker push ${env.ECR_REPO}:${env.IMAGE_TAG}
                     """
