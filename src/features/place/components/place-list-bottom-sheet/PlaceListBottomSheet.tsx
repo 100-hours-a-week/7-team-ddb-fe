@@ -6,13 +6,14 @@ import { BOTTOM_SHEET_SNAP_POINTS } from '../../constants';
 import {
   useBottomSheetSnapManagement,
   useGlobalFocusHandler,
-  useScrollRestoration,
   useSortedPlaceList,
 } from '../../hooks';
 import { useBottomSheetStore } from '../../stores';
 import { Place } from '../../types';
 import { PlaceItem } from '../place-item';
 import { PlaceSortSelect } from '../place-sort-select';
+
+import { useScrollRestoration } from '@/shared/hooks';
 
 export interface PlaceListBottomSheetProps {
   places: Place[];
