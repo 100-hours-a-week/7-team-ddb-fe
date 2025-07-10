@@ -73,6 +73,7 @@ pipeline {
                     docker build \
                       --build-arg NEXT_PUBLIC_API_BASE_URL=${env.API_BASE_URL} \
                       --build-arg NEXT_PUBLIC_KAKAOMAP_KEY=${env.KAKAOMAP_KEY} \
+                      --build-arg ENV_LABEL=${env.ENV_LABEL} \
                       -t ${env.ECR_REPO}:${env.IMAGE_TAG} .
                     docker push ${env.ECR_REPO}:${env.IMAGE_TAG}
                     """
