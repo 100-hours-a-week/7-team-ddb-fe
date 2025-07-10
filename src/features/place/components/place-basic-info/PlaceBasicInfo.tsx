@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import { PlaceDetail } from '../../types';
 import { BookmarkButton } from '../bookmark-button';
 
@@ -20,11 +22,7 @@ export function PlaceBasicInfo({ placeBasicInfo }: PlaceBasicInfoProps) {
     <>
       <div className="relative mb-6 aspect-square w-full overflow-hidden rounded-lg">
         {thumbnail ? (
-          <img
-            src={thumbnail}
-            alt={name}
-            className="h-full w-full object-cover"
-          />
+          <Image src={thumbnail} alt={name} className="object-cover" fill />
         ) : (
           <div className="h-full w-full bg-gray-200">
             <div className="flex h-full w-full items-center justify-center">

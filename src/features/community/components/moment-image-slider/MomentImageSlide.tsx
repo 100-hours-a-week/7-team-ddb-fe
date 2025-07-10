@@ -13,7 +13,6 @@ export function MomentImageSlide({ imageUrl }: MomentImageSlideProps) {
         width={368}
         height={368}
         className="pointer-events-none h-full w-full object-contain"
-        style={{ objectFit: 'contain' }}
       />
     </div>
   );
