@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React from 'react';
 
 interface ProfileImageInputProps {
@@ -38,7 +39,7 @@ export function ProfileImageInput({
   previewClassName = 'h-32 w-32',
 }: ProfileImageInputProps) {
   const renderSinglePreview = (src: string) => (
-    <img src={src} alt={altText} className="h-full w-full object-cover" />
+    <Image src={src} alt={altText} className="object-cover" fill />
   );
 
   const renderPlaceholder = () => (
