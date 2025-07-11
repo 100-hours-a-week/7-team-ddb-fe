@@ -13,7 +13,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: cdnHost,
+        hostname: 'cdn.dolpin.site',
+        pathname: '/**',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.dev.dolpin.site',
         pathname: '/**',
         port: '',
       },
