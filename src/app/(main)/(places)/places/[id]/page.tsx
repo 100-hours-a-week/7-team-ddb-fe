@@ -24,7 +24,7 @@ export default async function PlaceDetailPage({
   if (!place) {
     return (
       <div className="flex h-screen flex-col items-center justify-center">
-        <div className="text-2xl font-bold">존재하지 않는 장소입니다.</div>
+        <div className="text-2xl font-semibold">존재하지 않는 장소입니다.</div>
       </div>
     );
   }
