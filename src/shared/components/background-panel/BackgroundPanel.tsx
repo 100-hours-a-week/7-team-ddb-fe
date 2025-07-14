@@ -16,7 +16,7 @@ export function BackgroundPanel() {
           </p>
           <div className="mt-10">
             <Image
-              src="/img/dolphin.png"
+              src="/img/dolphin.avif"
               alt="돌핀"
               width={200}
               height={200}
