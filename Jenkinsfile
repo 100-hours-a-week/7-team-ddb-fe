@@ -56,10 +56,12 @@ pipeline {
                 script {
                     withCredentials([
                         string(credentialsId: "${env.API_BASE_CRED_ID}", variable: 'API_BASE_URL'),
-                        string(credentialsId: 'NEXT_PUBLIC_KAKAOMAP_KEY', variable: 'KAKAOMAP_KEY')
+                        string(credentialsId: 'NEXT_PUBLIC_KAKAOMAP_KEY', variable: 'KAKAOMAP_KEY'),
+                        string(credentialsId: 'NEXT_PUBLIC_GA_ID', variable: 'NEXT_PUBLIC_GA_ID')
                     ]) {
                         env.API_BASE_URL = API_BASE_URL
                         env.KAKAOMAP_KEY = KAKAOMAP_KEY
+                        env.NEXT_PUBLIC_GA_ID = NEXT_PUBLIC_GA_ID 
                     }
                 }
             }
@@ -73,6 +75,7 @@ pipeline {
                     docker build \
                       --build-arg NEXT_PUBLIC_API_BASE_URL=${env.API_BASE_URL} \
                       --build-arg NEXT_PUBLIC_KAKAOMAP_KEY=${env.KAKAOMAP_KEY} \
+                      --build-arg NEXT_PUBLIC_GA_ID=${env.NEXT_PUBLIC_GA_ID} \
                       -t ${env.ECR_REPO}:${env.IMAGE_TAG} .
                     docker push ${env.ECR_REPO}:${env.IMAGE_TAG}
                     """
