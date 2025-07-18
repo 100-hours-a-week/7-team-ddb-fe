@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+const fileSchema = typeof File !== 'undefined' ? z.instanceof(File) : z.any();
+
 export const momentSchema = z.object({
   title: z
     .string()
@@ -11,7 +13,7 @@ export const momentSchema = z.object({
     .max(2200, '2200자 이하로 입력해주세요'),
   place_id: z.number().optional(),
   place_name: z.string().optional(),
-  images: z.array(z.union([z.instanceof(File), z.string()])).optional(),
+  images: z.array(z.union([fileSchema, z.string()])).optional(),
   is_public: z.boolean(),
 });
 
