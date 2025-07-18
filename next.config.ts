@@ -1,7 +1,12 @@
-import type { NextConfig } from 'next';
+import withBundleAnalyzer from '@next/bundle-analyzer';
+import { NextConfig } from 'next';
 
 const ENV = process.env.ENV_LABEL;
 const cdnHost = ENV === 'prod' ? 'cdn.dolpin.site' : 'cdn.dev.dolpin.site';
+
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 const nextConfig: NextConfig = {
   env: {
@@ -25,6 +30,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  experimental: {
+    optimizePackageImports: ['iconoir-react'],
+  },
 };
 
-export default nextConfig;
+export default bundleAnalyzer(nextConfig);
