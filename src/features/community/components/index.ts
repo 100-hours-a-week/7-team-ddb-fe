@@ -14,3 +14,4 @@ export * from './place-moment-section';
 export * from './moment-detail-client';
 export * from './new-moment-form';
 export * from './moments-client';
+export * from './moment-edit-skeleton';
