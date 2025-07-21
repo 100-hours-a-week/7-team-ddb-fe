@@ -1,6 +1,14 @@
-.dolphinFloat {
-  animation: float 3s ease-in-out infinite;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 @keyframes float {
   0%,
   100% {
@@ -9,4 +17,12 @@
   50% {
     transform: translateY(-24px);
   }
+}
+
+.dolphinFloat {
+  opacity: 0;
+
+  animation:
+    fadeIn 0.5s ease-out 0.5s forwards,
+    float 3s ease-in-out 1s infinite;
 }

@@ -57,7 +57,7 @@ export function ProfileSettingsSheet() {
             <Link key={item.href} href={item.href}>
               <Button
                 variant="ghost"
-                className="w-full justify-start font-light"
+                className="w-full justify-start font-medium"
               >
                 {item.icon}
                 {item.label}

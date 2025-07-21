@@ -46,6 +46,7 @@ export function CommentInput({
             size="icon"
             className="rounded-full"
             onClick={cancelReply}
+            aria-label="cancel reply"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -57,13 +58,14 @@ export function CommentInput({
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="flex-1 text-sm"
+          className="flex-1 text-base"
         />
         <Button
           onClick={handleSubmit}
           disabled={!content.trim()}
           size="icon"
           variant="ghost"
+          aria-label="submit comment"
         >
           <Send className="h-5 w-5" />
         </Button>
