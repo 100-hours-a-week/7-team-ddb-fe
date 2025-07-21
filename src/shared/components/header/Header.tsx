@@ -32,6 +32,7 @@ export function Header({
           <button
             onClick={handleBackClick}
             className="flex cursor-pointer items-center gap-2"
+            aria-label="back"
           >
             <NavArrowLeft className="h-6 w-6" />
           </button>

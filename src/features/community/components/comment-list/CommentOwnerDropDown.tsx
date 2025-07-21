@@ -20,7 +20,12 @@ export function CommentOwnerDropDown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-8 w-8">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          aria-label="more options"
+        >
           <MoreVertical className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -28,6 +33,7 @@ export function CommentOwnerDropDown({
         <DropdownMenuItem
           className="text-destructive"
           onClick={() => onDelete?.(id)}
+          aria-label="delete comment"
         >
           <Trash2 className="mr-2 h-4 w-4" />
           삭제

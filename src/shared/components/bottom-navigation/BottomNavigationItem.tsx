@@ -21,9 +21,11 @@ export function BottomNavigationItem({
       <button
         onClick={onClick}
         className="flex w-24 cursor-pointer flex-col items-center justify-center"
+        aria-label={item.label}
       >
         {isCenter ? (
           <CenterButton
+            label={item.label}
             isActive={isActive}
             icon={item.icon}
             solidIcon={item.solidIcon}

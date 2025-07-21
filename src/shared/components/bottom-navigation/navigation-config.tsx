@@ -11,6 +11,7 @@ export interface NavItem {
   icon: React.ReactNode;
   solidIcon: React.ReactNode;
   href: string;
+  label: string;
   isHome?: boolean;
 }
 
@@ -19,16 +20,19 @@ export const navigationItems: NavItem[] = [
     icon: <MultiBubble className="h-8 w-8" />,
     solidIcon: <MultiBubbleSolid className="h-8 w-8" />,
     href: '/moments',
+    label: 'moments',
   },
   {
     icon: <Home className="h-12 w-12" />,
     solidIcon: <HomeAlt className="h-12 w-12" />,
     href: '/',
+    label: 'home',
     isHome: true,
   },
   {
     icon: <UserCircle className="h-8 w-8" />,
     solidIcon: <UserCircle className="h-8 w-8" />,
     href: '/mypage',
+    label: 'mypage',
   },
 ];

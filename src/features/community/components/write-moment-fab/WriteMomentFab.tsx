@@ -32,6 +32,7 @@ export function WriteMomentFab({ place }: WriteMomentFabProps) {
       <div className="flex w-full justify-end">
         <Button
           size="icon"
+          aria-label="write moment"
           className="mr-5 h-14 w-14 rounded-full bg-rose-300 shadow-lg hover:bg-rose-400"
           onClick={handleClick}
         >

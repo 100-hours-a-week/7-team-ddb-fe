@@ -15,6 +15,7 @@ export function HeaderVisibilityToggle({
       <Switch
         checked={isPublic}
         onCheckedChange={onToggle}
+        aria-label="toggle visibility"
         className={cn(
           'peer bg-muted relative h-8 w-20 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors',
           'data-[state=checked]:bg-neutral-500',
