@@ -1,4 +1,6 @@
+import { Metadata } from 'next';
 import { cookies } from 'next/headers';
+import { cache } from 'react';
 
 import { PlaceMomentSection, WriteMomentFab } from '@/features/community';
 import {
@@ -13,13 +15,69 @@ interface PlaceDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
+const getCachedPlace = cache(async (placeId: string, cookie: string) => {
+  return await getPlaceDetail({ placeId, cookie });
+});
+
+export async function generateMetadata({
+  params,
+}: PlaceDetailPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const cookie = (await cookies()).toString();
+
+  try {
+    const place = await getCachedPlace(id, cookie);
+
+    if (!place) {
+      return {
+        title: 'Dolpin | 장소를 찾을 수 없습니다',
+        description: '요청하신 장소를 찾을 수 없습니다.',
+      };
+    }
+
+    const title = `Dolpin | ${place.name}`;
+    const description = `${place.name}${place.address ? ` - ${place.address}` : ''}. 장소 정보와 실제 방문 후기를 확인하세요.`;
+    const keywords = `${place.name}, ${place.address || ''}, 장소 정보, 방문 후기, ${place.keywords.join(', ')}`;
+
+    return {
+      title,
+      description,
+      keywords,
+      openGraph: {
+        title,
+        description,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/places/${id}`,
+        images: [
+          {
+            url: place.thumbnail || '/img/openGraph.jpg',
+            width: 1200,
+            height: 630,
+            alt: place.name,
+          },
+        ],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: [place.thumbnail || '/img/openGraph.jpg'],
+      },
+    };
+  } catch {
+    return {
+      title: 'Dolpin | 장소를 불러올 수 없습니다',
+      description: '장소 정보를 불러오는 중 오류가 발생했습니다.',
+    };
+  }
+}
+
 export default async function PlaceDetailPage({
   params,
 }: PlaceDetailPageProps) {
   const { id } = await params;
   const cookie = (await cookies()).toString();
 
-  const place = await getPlaceDetail({ placeId: id, cookie });
+  const place = await getCachedPlace(id, cookie);
 
   if (!place) {
     return (
