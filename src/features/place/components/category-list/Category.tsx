@@ -22,7 +22,7 @@ export function Category({ category }: { category: string }) {
     <Button
       key={category}
       variant="ghost"
-      className="label-text min-w-21 transform-gpu rounded-full bg-white shadow transition-all duration-150 hover:scale-105 hover:bg-rose-100"
+      className="min-w-21 transform-gpu rounded-full bg-white text-xs shadow transition-all duration-150 hover:scale-105 hover:bg-rose-100"
       onClick={() => handleClick(category)}
     >
       {category}
