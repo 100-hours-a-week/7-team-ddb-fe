@@ -13,8 +13,8 @@
   --font-size-body: 14px;
   --font-size-caption: 12px;
   --font-size-button: 14px;
-  --font-size-input: 14px;
-  --font-size-label: 12px;
+  --font-size-input: 16px;
+  --font-size-label: 14px;
 
   --radius: 0.625rem;
   --background: oklch(1 0 0);

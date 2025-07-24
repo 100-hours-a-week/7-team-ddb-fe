@@ -46,7 +46,7 @@ export function SearchBar({
           value={searchQuery}
           onChange={handleInputChange}
           placeholder={placeholder}
-          className="focus:border-primary focus:ring-primary h-12 w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 pr-10 text-sm shadow-md transition-all duration-200 hover:shadow-lg focus:shadow-lg focus:ring-1 focus:outline-none"
+          className="focus:border-primary focus:ring-primary h-12 w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 pr-10 text-base shadow-md transition-all duration-200 hover:shadow-lg focus:shadow-lg focus:ring-1 focus:outline-none"
           maxLength={25}
         />
         <Button
