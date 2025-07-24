@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useCommentStore } from '../../stores';
 
 import { Button, Input } from '@/shared/components';
+import { useLoginRequiredAction } from '@/shared/hooks';
 
 interface CommentInputProps {
   onSubmit: (content: string) => void;
@@ -18,12 +19,15 @@ export function CommentInput({
 }: CommentInputProps) {
   const [content, setContent] = useState('');
   const { replyState, cancelReply } = useCommentStore();
+  const loginRequiredAction = useLoginRequiredAction();
 
   const handleSubmit = () => {
     if (!content.trim()) return;
 
-    onSubmit(content);
-    setContent('');
+    loginRequiredAction(async () => {
+      onSubmit(content);
+      setContent('');
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

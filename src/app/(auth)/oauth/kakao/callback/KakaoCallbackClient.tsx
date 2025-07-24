@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 import { issueAuthTokens } from '@/features/user';
+import { useUserStore } from '@/shared/store';
 
 export default function KakaoCallbackClient() {
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function KakaoCallbackClient() {
   const code = searchParams.get('code');
   const error = searchParams.get('error');
   const error_description = searchParams.get('error_description');
+  const { setLoggedIn } = useUserStore();
 
   useEffect(() => {
     async function handleCallback() {
@@ -35,6 +37,8 @@ export default function KakaoCallbackClient() {
           return;
         }
 
+        setLoggedIn(true);
+
         if (!response.user.profile_completed) {
           router.push('/auth/consent');
         } else {
@@ -47,7 +51,7 @@ export default function KakaoCallbackClient() {
     }
 
     handleCallback();
-  }, [code, error, error_description, router]);
+  }, [code, error, error_description, router, setLoggedIn]);
 
   return (
     <div

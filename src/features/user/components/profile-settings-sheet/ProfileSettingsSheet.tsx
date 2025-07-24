@@ -16,13 +16,17 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/shared/components';
+import { useUserStore } from '@/shared/store';
+
 export function ProfileSettingsSheet() {
   const router = useRouter();
+  const { setLoggedIn } = useUserStore();
 
   const handleLogout = async () => {
     try {
       await logout();
       router.push('/onboarding');
+      setLoggedIn(false);
     } catch (error) {
       console.error('로그아웃 실패:', error);
     }
