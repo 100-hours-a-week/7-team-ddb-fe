@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Suspense } from 'react';
 
 import {
@@ -20,6 +21,9 @@ export default async function Onboarding() {
             <KakaoLoginButton />
           </Suspense>
         </div>
+        <Link href="/" className="mt-2 text-sm text-gray-500">
+          로그인 없이 시작하기
+        </Link>
       </div>
     </div>
   );
