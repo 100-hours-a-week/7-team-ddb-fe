@@ -82,8 +82,8 @@ pipeline {
                       --build-arg NEXT_PUBLIC_KAKAOMAP_KEY=${env.KAKAOMAP_KEY} \
                       --build-arg NEXT_PUBLIC_GA_ID=${env.NEXT_PUBLIC_GA_ID} \
                       --build-arg NEXT_PUBLIC_SITE_URL=${env.NEXT_PUBLIC_SITE_URL} \
-
                       -t ${env.ECR_REPO}:${env.IMAGE_TAG} .
+                      
                     docker push ${env.ECR_REPO}:${env.IMAGE_TAG}
                     """
                 }
