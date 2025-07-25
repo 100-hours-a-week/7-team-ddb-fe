@@ -8,6 +8,7 @@ import {
   useSearchPlacesQuery,
 } from '@/features/place';
 import { FullScreenMessage } from '@/shared/components';
+import { useSession } from '@/shared/hooks';
 
 export default function SearchPage() {
   const { query, lat, lng, category } = usePlaceSearchParams();
@@ -17,6 +18,7 @@ export default function SearchPage() {
     lng,
     category,
   });
+  const { isLoggedIn } = useSession();
 
   const places: Place[] = data?.places || [];
 
@@ -40,8 +42,8 @@ export default function SearchPage() {
 
   return (
     <div className="relative h-full w-full">
-      <Map places={places} />
-      <PlaceListBottomSheet places={places} />
+      <Map places={places} isBookmarkButton={isLoggedIn} />
+      <PlaceListBottomSheet places={places} isBookmarkButton={isLoggedIn} />
     </div>
   );
 }

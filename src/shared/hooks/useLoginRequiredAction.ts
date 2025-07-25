@@ -1,7 +1,9 @@
-import { useConfirmDialogStore, useUserStore } from '../store';
+import { useConfirmDialogStore } from '../store';
+
+import { useSession } from './useSession';
 
 export function useLoginRequiredAction() {
-  const { isLoggedIn } = useUserStore();
+  const { isLoggedIn } = useSession();
   const openDialog = useConfirmDialogStore((s) => s.openDialog);
 
   return async (callback: () => void) => {
