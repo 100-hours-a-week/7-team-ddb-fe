@@ -7,7 +7,6 @@ import {
   GlobalConfirmDialog,
   Toaster,
 } from '@/shared/components';
-import { pretendard } from '@/shared/fonts';
 import { QueryProvider } from '@/shared/providers';
 
 import './globals.css';
@@ -54,7 +53,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${pretendard.variable}`}>
+      <body>
         <QueryProvider>
           <BackgroundPanel />
           <div className="mobile-container relative">
