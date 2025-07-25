@@ -1,11 +1,7 @@
 import { MetadataRoute } from 'next';
 
 import { getMoments } from '@/features/community';
-import { getCategories, searchPlaces } from '@/features/place/api';
-import {
-  DEFAULT_LATITUDE,
-  DEFAULT_LONGITUDE,
-} from '@/features/place/constants';
+import { getPlaceIdList } from '@/features/place/api';
 
 export const revalidate = 86400;
 
@@ -55,43 +51,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }),
     );
 
-    const categoriesData = await getCategories();
-    const popularCategories = categoriesData.categories;
+    const { ids } = await getPlaceIdList();
 
-    const placePromises = popularCategories.map(async (category) => {
-      try {
-        const placesData = await searchPlaces({
-          query: '',
-          lat: DEFAULT_LATITUDE.toString(),
-          lng: DEFAULT_LONGITUDE.toString(),
-          category: category,
-        });
-
-        return placesData.places.map((place) => ({
-          url: `${baseUrl}/places/${place.id}`,
-          lastModified: new Date(),
-          changeFrequency: 'weekly' as const,
-          priority: 0.6,
-        }));
-      } catch (categoryError) {
-        console.error(`카테고리 '${category}' 검색 실패:`, categoryError);
-        return [];
-      }
-    });
-
-    const placeResults = await Promise.all(placePromises);
-    const flatPlacePages = placeResults.flat();
-
-    const uniquePlacePages = flatPlacePages.filter(
-      (page, index, self) =>
-        index === self.findIndex((p) => p.url === page.url),
-    );
+    const placePages: MetadataRoute.Sitemap = ids.map((id) => ({
+      url: `${baseUrl}/places/${id}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }));
 
     console.log(
-      `사이트맵 생성 완료: ${momentPages.length}개 기록, ${uniquePlacePages.length}개 장소`,
+      `사이트맵 생성 완료: ${momentPages.length}개 기록, ${placePages.length}개 장소`,
     );
 
-    return [...staticPages, ...momentPages, ...uniquePlacePages];
+    return [...staticPages, ...momentPages, ...placePages];
   } catch (error) {
     console.error('Error generating sitemap:', error);
     return staticPages;
