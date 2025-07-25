@@ -17,9 +17,10 @@ import { loadKakaoMapScript } from '@/shared/lib/map';
 
 export interface MapProps {
   places: Place[];
+  isBookmarkButton?: boolean;
 }
 
-export function Map({ places }: MapProps) {
+export function Map({ places, isBookmarkButton }: MapProps) {
   const { showToast } = usePlaceToast();
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
@@ -86,6 +87,7 @@ export function Map({ places }: MapProps) {
       <PlacePinBottomSheet
         onOpenChange={handleCloseBottomSheet}
         place={places.find((place) => place.id === lastPlaceId) || null}
+        isBookmarkButton={isBookmarkButton}
       />
     </>
   );

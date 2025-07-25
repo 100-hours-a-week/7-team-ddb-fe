@@ -9,11 +9,13 @@ import { PlaceItem } from '../place-item';
 interface PlacePinBottomSheetProps {
   onOpenChange: (open: boolean) => void;
   place: Place | null;
+  isBookmarkButton?: boolean;
 }
 
 export function PlacePinBottomSheet({
   onOpenChange,
   place,
+  isBookmarkButton,
 }: PlacePinBottomSheetProps) {
   const opened = useBottomSheetStore((state) => state.opened);
   const isOpen = opened === 'pin';
@@ -34,7 +36,11 @@ export function PlacePinBottomSheet({
                 <Drawer.Description className="sr-only">
                   {place.name} 장소 정보를 확인할 수 있는 드로어입니다.
                 </Drawer.Description>
-                <PlaceItem place={place} isDetailButton />
+                <PlaceItem
+                  place={place}
+                  isDetailButton
+                  isBookmarkButton={isBookmarkButton}
+                />
               </div>
             </div>
           </div>
