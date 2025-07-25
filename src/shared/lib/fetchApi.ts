@@ -59,10 +59,9 @@ export async function fetchApi<T = unknown>(
     },
   };
 
-  // 서버 컴포넌트 캐싱 옵션 (필요시 활성화)
-  // if (typeof window === 'undefined' && !config.cache && !options.next) {
-  //   config.next = { revalidate: 0 }; // 예: 매번 재검증 (SSR과 유사)
-  // }
+  if ('next' in options && options.next) {
+    config.next = options.next;
+  }
 
   console.log(`Fetching API: ${config.method || 'GET'} ${url}`);
 

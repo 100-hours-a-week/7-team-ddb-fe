@@ -13,12 +13,14 @@ export interface PlaceItemProps {
   place: PlaceItemType;
   isClickable?: boolean;
   isDetailButton?: boolean;
+  isBookmarkButton?: boolean;
 }
 
 export function PlaceItem({
   place,
   isClickable,
   isDetailButton,
+  isBookmarkButton,
 }: PlaceItemProps) {
   const router = useRouter();
   const { id, name, thumbnail, keywords, is_bookmarked } = place;
@@ -40,7 +42,8 @@ export function PlaceItem({
                 src={thumbnail}
                 alt="장소 이미지"
                 className="h-full w-full object-cover"
-                fill
+                width={96}
+                height={96}
               />
             ) : (
               <div className="h-full w-full bg-gray-200">
@@ -55,11 +58,13 @@ export function PlaceItem({
             <KeywordList keywords={keywords} />
           </div>
         </div>
-        <BookmarkButton
-          placeId={id}
-          initialIsBookmarked={is_bookmarked}
-          className="mr-4"
-        />
+        {isBookmarkButton && (
+          <BookmarkButton
+            placeId={id}
+            initialIsBookmarked={is_bookmarked}
+            className="mr-4"
+          />
+        )}
       </div>
       {isDetailButton && (
         <Button

@@ -17,9 +17,13 @@ import { useScrollRestoration } from '@/shared/hooks';
 
 export interface PlaceListBottomSheetProps {
   places: Place[];
+  isBookmarkButton?: boolean;
 }
 
-export function PlaceListBottomSheet({ places }: PlaceListBottomSheetProps) {
+export function PlaceListBottomSheet({
+  places,
+  isBookmarkButton,
+}: PlaceListBottomSheetProps) {
   const {
     opened,
     prevSnap,
@@ -82,7 +86,11 @@ export function PlaceListBottomSheet({ places }: PlaceListBottomSheetProps) {
             <div className="space-y-8">
               {sortedPlaces.map((place) => (
                 <div key={place.id} className="border-b border-zinc-200 pb-8">
-                  <PlaceItem place={place} isClickable />
+                  <PlaceItem
+                    place={place}
+                    isClickable
+                    isBookmarkButton={isBookmarkButton}
+                  />
                 </div>
               ))}
             </div>
