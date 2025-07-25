@@ -1,32 +1,41 @@
 import { Metadata } from 'next';
-import { cookies } from 'next/headers';
 import { cache } from 'react';
 
 import { PlaceMomentSection, WriteMomentFab } from '@/features/community';
 import {
   getPlaceDetail,
+  getPlaceIdList,
+  OpenHoursStatus,
   PlaceBasicInfo,
   PlaceMenu,
   PlaceOpenHours,
 } from '@/features/place';
 import { Header } from '@/shared/components';
 
+export const revalidate = 86400;
+
 interface PlaceDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
-const getCachedPlace = cache(async (placeId: string, cookie: string) => {
-  return await getPlaceDetail({ placeId, cookie });
+const getCachedPlace = cache(async (placeId: string) => {
+  return await getPlaceDetail({ placeId });
 });
+
+export async function generateStaticParams() {
+  const placeIdList = await getPlaceIdList();
+  return placeIdList.ids.map((id) => ({
+    id: id.toString(),
+  }));
+}
 
 export async function generateMetadata({
   params,
 }: PlaceDetailPageProps): Promise<Metadata> {
   const { id } = await params;
-  const cookie = (await cookies()).toString();
 
   try {
-    const place = await getCachedPlace(id, cookie);
+    const place = await getCachedPlace(id);
 
     if (!place) {
       return {
@@ -75,9 +84,8 @@ export default async function PlaceDetailPage({
   params,
 }: PlaceDetailPageProps) {
   const { id } = await params;
-  const cookie = (await cookies()).toString();
 
-  const place = await getCachedPlace(id, cookie);
+  const place = await getCachedPlace(id);
 
   if (!place) {
     return (
@@ -88,9 +96,10 @@ export default async function PlaceDetailPage({
   }
 
   const { opening_hours, menu, ...placeBasicInfo } = place;
-
   const isMenuEmpty = !menu || menu.length === 0;
-  const isOpenHoursEmpty = opening_hours.status === '영업 여부 확인 필요';
+  const isOpenHoursEmpty =
+    opening_hours.status ===
+    ('영업 여부 확인 필요' as unknown as OpenHoursStatus);
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
@@ -100,7 +109,9 @@ export default async function PlaceDetailPage({
       <div className="flex-1 overflow-y-scroll">
         <div className="mx-auto mb-4 px-4 pt-20 pb-22">
           <PlaceBasicInfo placeBasicInfo={placeBasicInfo} />
-          {!isOpenHoursEmpty && <PlaceOpenHours openHours={opening_hours} />}
+          {!isOpenHoursEmpty && (
+            <PlaceOpenHours openHours={opening_hours} placeId={id} />
+          )}
           {!isMenuEmpty && <PlaceMenu menu={menu} />}
           <PlaceMomentSection placeId={Number(id)} />
         </div>
