@@ -60,11 +60,13 @@ pipeline {
                         string(credentialsId: 'NEXT_PUBLIC_KAKAOMAP_KEY', variable: 'KAKAOMAP_KEY'),
                         string(credentialsId: 'NEXT_PUBLIC_GA_ID', variable: 'NEXT_PUBLIC_GA_ID'),
                         string(credentialsId: "${env.NEXT_PUBLIC_SITE}", variable: 'NEXT_PUBLIC_SITE')
+
                     ]) {
                         env.API_BASE_URL = API_BASE_URL
                         env.KAKAOMAP_KEY = KAKAOMAP_KEY
                         env.NEXT_PUBLIC_GA_ID = NEXT_PUBLIC_GA_ID 
                         env.NEXT_PUBLIC_SITE_URL = NEXT_PUBLIC_SITE
+
                     }
                 }
             }
@@ -80,6 +82,7 @@ pipeline {
                       --build-arg NEXT_PUBLIC_KAKAOMAP_KEY=${env.KAKAOMAP_KEY} \
                       --build-arg NEXT_PUBLIC_GA_ID=${env.NEXT_PUBLIC_GA_ID} \
                       --build-arg NEXT_PUBLIC_SITE_URL=${env.NEXT_PUBLIC_SITE_URL} \
+
                       -t ${env.ECR_REPO}:${env.IMAGE_TAG} .
                     docker push ${env.ECR_REPO}:${env.IMAGE_TAG}
                     """
