@@ -1,21 +1,26 @@
+import { Suspense } from 'react';
+
 import { OpenHours } from '../../types';
+import { PlaceBusinessStatus } from '../place-business-status';
 
 export interface PlaceOpenHoursProps {
   openHours: OpenHours;
+  placeId: string;
 }
 
-export function PlaceOpenHours({ openHours }: PlaceOpenHoursProps) {
+export function PlaceOpenHours({ openHours, placeId }: PlaceOpenHoursProps) {
   return (
     <div className="mb-6">
       <h2 className="heading-2">영업 시간</h2>
-      {openHours.status === '영업 중' && (
-        <p className="heading-3 my-3 font-medium text-green-600">영업 중</p>
-      )}
-      {openHours.status !== '영업 중' && (
-        <p className="heading-3 my-3 font-medium text-red-600">
-          {openHours.status}
-        </p>
-      )}
+      <Suspense
+        fallback={
+          <p className="heading-3 my-3 font-medium text-gray-600">
+            영업 상태를 불러오는 중입니다.
+          </p>
+        }
+      >
+        <PlaceBusinessStatus placeId={placeId} />
+      </Suspense>
 
       {openHours.schedules.map((schedule) => (
         <div key={schedule.day} className="my-1 flex justify-between">
