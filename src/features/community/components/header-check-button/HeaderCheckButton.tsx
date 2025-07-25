@@ -13,6 +13,7 @@ export function HeaderCheckButton({
     <button
       onClick={onClick}
       disabled={disabled}
+      aria-label="submit moment"
       className={`p-1 ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:opacity-80'}`}
     >
       <CheckIcon className="h-6 w-6" />

@@ -68,6 +68,7 @@ export function MomentImagesInput({
                   src={imageUrl}
                   alt={`이미지 ${index + 1}`}
                   className="object-cover"
+                  priority
                   fill
                 />
               </div>
@@ -75,6 +76,7 @@ export function MomentImagesInput({
                 type="button"
                 variant="ghost"
                 size="icon"
+                aria-label="remove image"
                 className="bg-background absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
                 onClick={() => removeImage(index)}
                 disabled={disabled}

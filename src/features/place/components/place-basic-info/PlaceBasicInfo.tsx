@@ -1,28 +1,27 @@
 import Image from 'next/image';
 
 import { PlaceDetail } from '../../types';
-import { BookmarkButton } from '../bookmark-button';
+import { PlaceBookmarkStatus } from '../place-bookmark-status';
 
 export interface PlaceBasicInfoProps {
   placeBasicInfo: Omit<PlaceDetail, 'menu' | 'opening_hours'>;
 }
 
 export function PlaceBasicInfo({ placeBasicInfo }: PlaceBasicInfoProps) {
-  const {
-    id,
-    thumbnail,
-    name,
-    address,
-    phone,
-    keywords,
-    description,
-    is_bookmarked,
-  } = placeBasicInfo;
+  const { id, thumbnail, name, address, phone, keywords, description } =
+    placeBasicInfo;
+
   return (
     <>
       <div className="relative mb-6 aspect-square w-full overflow-hidden rounded-lg">
         {thumbnail ? (
-          <Image src={thumbnail} alt={name} className="object-cover" fill />
+          <Image
+            src={thumbnail}
+            alt={name}
+            className="object-cover"
+            priority
+            fill
+          />
         ) : (
           <div className="h-full w-full bg-gray-200">
             <div className="flex h-full w-full items-center justify-center">
@@ -33,11 +32,7 @@ export function PlaceBasicInfo({ placeBasicInfo }: PlaceBasicInfoProps) {
       </div>
       <div className="flex justify-between">
         <h1 className="heading-1 mb-4">{name}</h1>
-        <BookmarkButton
-          placeId={id}
-          initialIsBookmarked={is_bookmarked}
-          className=""
-        />
+        <PlaceBookmarkStatus placeId={id} />
       </div>
       <div className="mb-6">
         {address && <p className="body-text mb-2 text-gray-600">{address}</p>}

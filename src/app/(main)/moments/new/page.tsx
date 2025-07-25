@@ -1,13 +1,10 @@
-'use client';
-
 import { Suspense } from 'react';
 
-import { NewMomentForm } from '@/features/community';
-import { FullScreenMessage } from '@/shared/components';
+import { MomentEditSkeleton, NewMomentForm } from '@/features/community';
 
 export default function NewMomentPage() {
   return (
-    <Suspense fallback={<FullScreenMessage message="로딩중..." />}>
+    <Suspense fallback={<MomentEditSkeleton />}>
       <NewMomentForm />
     </Suspense>
   );

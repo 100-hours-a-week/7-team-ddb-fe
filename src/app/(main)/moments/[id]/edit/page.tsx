@@ -7,11 +7,12 @@ import {
   getMomentById,
   HeaderCheckButton,
   HeaderVisibilityToggle,
+  MomentEditSkeleton,
   MomentForm,
   MomentFormValues,
   patchMoment,
 } from '@/features/community';
-import { FullScreenMessage, Header } from '@/shared/components';
+import { Header } from '@/shared/components';
 import { useImageUpload, useToast } from '@/shared/hooks';
 
 export default function EditMomentPage() {
@@ -52,7 +53,6 @@ export default function EditMomentPage() {
   }, []);
 
   const handleSubmit = async (data: MomentFormValues) => {
-    console.log('handleSubmit', data);
     setIsSubmittingForm(true);
     try {
       const imageUrls: string[] = [];
@@ -90,7 +90,7 @@ export default function EditMomentPage() {
   };
 
   if (!defaultValues) {
-    return <FullScreenMessage message="기록을 불러오는 중..." />;
+    return <MomentEditSkeleton />;
   }
 
   return (

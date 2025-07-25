@@ -40,22 +40,25 @@ export interface PlaceDetail {
   phone: string | null;
   menu?: Menu[];
   opening_hours: OpenHours;
-  is_bookmarked: boolean;
 }
 
 export interface OpenHours {
-  status:
-    | '영업 중'
-    | '영업 종료'
-    | '브레이크 타임'
-    | '휴무일'
-    | '영업 정보 없음'
-    | '영업 여부 확인 필요';
+  status: OpenHoursStatus;
   schedules: {
     day: 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
     hours: string | null;
     break_time: string | null;
   }[];
+}
+
+export interface OpenHoursStatus {
+  status:
+    | '영업중'
+    | '영업 종료'
+    | '브레이크 타임'
+    | '휴무일'
+    | '영업 정보 없음'
+    | '영업 여부 확인 필요';
 }
 export interface Menu {
   name: string;

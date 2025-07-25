@@ -6,9 +6,6 @@ export async function getCategories(): Promise<CategoriesResponse> {
   try {
     const response = await fetchApi<CategoriesResponse>(
       '/api/v1/places/categories',
-      {
-        cache: 'no-store',
-      },
     );
     return response;
   } catch (error) {

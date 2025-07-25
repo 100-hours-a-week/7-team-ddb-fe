@@ -36,13 +36,13 @@ export function CommentItem({
       <div
         className={`flex gap-3 p-4 ${isReply ? 'mx-4 mb-2 rounded-lg border-l-2 border-gray-200 bg-gray-50/50' : ''}`}
       >
-        <Link href={`/users/${user.id}`}>
+        <Link href={`/users/${user.id}`} aria-label="user profile">
           <UserAvatar imageUrl={user.profileImage} size="small" />
         </Link>
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Link href={`/users/${user.id}`}>
+              <Link href={`/users/${user.id}`} aria-label="user profile">
                 <span className={`font-medium ${isReply ? 'text-sm' : ''}`}>
                   {user.nickname}
                 </span>

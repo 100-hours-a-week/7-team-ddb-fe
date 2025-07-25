@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useCommentStore } from '../../stores';
 
 import { Button, Input } from '@/shared/components';
+import { useLoginRequiredAction } from '@/shared/hooks';
 
 interface CommentInputProps {
   onSubmit: (content: string) => void;
@@ -18,12 +19,15 @@ export function CommentInput({
 }: CommentInputProps) {
   const [content, setContent] = useState('');
   const { replyState, cancelReply } = useCommentStore();
+  const loginRequiredAction = useLoginRequiredAction();
 
   const handleSubmit = () => {
     if (!content.trim()) return;
 
-    onSubmit(content);
-    setContent('');
+    loginRequiredAction(async () => {
+      onSubmit(content);
+      setContent('');
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -46,6 +50,7 @@ export function CommentInput({
             size="icon"
             className="rounded-full"
             onClick={cancelReply}
+            aria-label="cancel reply"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -57,13 +62,14 @@ export function CommentInput({
           onChange={(e) => setContent(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="flex-1 text-sm"
+          className="flex-1 text-base"
         />
         <Button
           onClick={handleSubmit}
           disabled={!content.trim()}
           size="icon"
           variant="ghost"
+          aria-label="submit comment"
         >
           <Send className="h-5 w-5" />
         </Button>

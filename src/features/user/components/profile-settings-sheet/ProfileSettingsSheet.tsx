@@ -5,8 +5,6 @@ import { UserCog, UserX } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { logout } from '../../api';
-
 import {
   Button,
   Sheet,
@@ -16,8 +14,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/shared/components';
+import { useSession } from '@/shared/hooks';
+
 export function ProfileSettingsSheet() {
   const router = useRouter();
+  const { logout } = useSession();
 
   const handleLogout = async () => {
     try {
@@ -57,7 +58,7 @@ export function ProfileSettingsSheet() {
             <Link key={item.href} href={item.href}>
               <Button
                 variant="ghost"
-                className="w-full justify-start font-light"
+                className="w-full justify-start font-medium"
               >
                 {item.icon}
                 {item.label}
