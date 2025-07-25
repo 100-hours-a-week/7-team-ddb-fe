@@ -7,3 +7,4 @@ export * from './logout';
 export * from './deleteUser';
 export * from './getUser';
 export * from './getUserById';
+export * from './validateSession';
