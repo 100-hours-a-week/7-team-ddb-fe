@@ -5,8 +5,6 @@ import { UserCog, UserX } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { logout } from '../../api';
-
 import {
   Button,
   Sheet,
@@ -16,17 +14,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/shared/components';
-import { useUserStore } from '@/shared/store';
+import { useSession } from '@/shared/hooks';
 
 export function ProfileSettingsSheet() {
   const router = useRouter();
-  const { setLoggedIn } = useUserStore();
+  const { logout } = useSession();
 
   const handleLogout = async () => {
     try {
       await logout();
       router.push('/onboarding');
-      setLoggedIn(false);
     } catch (error) {
       console.error('로그아웃 실패:', error);
     }
