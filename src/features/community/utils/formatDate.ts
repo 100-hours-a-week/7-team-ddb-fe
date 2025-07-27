@@ -1,11 +1,4 @@
-import {
-  getKSTDate,
-  format,
-  differenceInMinutes,
-  differenceInHours,
-  differenceInDays,
-  differenceInWeeks,
-} from '../../../shared/lib/date';
+import { ImmutableDate } from '@/shared/lib/ImmutableDate';
 
 export type DateFormatType = 'default' | 'detail' | 'relative';
 
@@ -27,48 +20,48 @@ export function formatDateByType(
 
 // 기본 날짜 표기
 function formatDefaultDate(isoString: string): string {
-  const date = getKSTDate(isoString);
-  return format(date, 'yyyy.MM.dd');
+  const date = new ImmutableDate(isoString);
+  return date.format('yyyy.MM.dd');
 }
 
 // 기록 상세 페이지 표기
 function formatDetailDate(isoString: string): string {
-  const date = getKSTDate(isoString);
-  return format(date, 'yy.MM.dd HH:mm');
+  const date = new ImmutableDate(isoString);
+  return date.format('yy.MM.dd HH:mm');
 }
 
 // 댓글·방문 기록용 상대 시간 표기
 function formatRelativeDate(isoString: string): string {
-  const target = getKSTDate(isoString);
-  const now = getKSTDate();
+  const target = new ImmutableDate(isoString);
+  const now = new ImmutableDate();
 
-  if (differenceInDays(now, target) < 1) {
-    if (differenceInMinutes(now, target) < 1) {
+  if (now.differenceInDays(target) < 1) {
+    if (now.differenceInMinutes(target) < 1) {
       return '방금 전';
     }
-    if (differenceInHours(now, target) < 1) {
-      const minutes = differenceInMinutes(now, target);
+    if (now.differenceInHours(target) < 1) {
+      const minutes = now.differenceInMinutes(target);
       return `${minutes}분 전`;
     }
-    const hours = differenceInHours(now, target);
+    const hours = now.differenceInHours(target);
     return `${hours}시간 전`;
   }
 
-  if (differenceInWeeks(now, target) < 1) {
-    const days = differenceInDays(now, target);
+  if (now.differenceInWeeks(target) < 1) {
+    const days = now.differenceInDays(target);
     if (days === 1) return '어제';
     return `${days}일 전`;
   }
 
-  if (differenceInWeeks(now, target) < 4) {
-    const weeks = differenceInWeeks(now, target);
+  if (now.differenceInWeeks(target) < 4) {
+    const weeks = now.differenceInWeeks(target);
     return `${weeks}주 전`;
   }
 
   const targetYear = target.getFullYear();
   const nowYear = now.getFullYear();
 
-  const month = target.getMonth() + 1;
+  const month = target.getMonth();
   const day = target.getDate();
 
   if (targetYear === nowYear) {
