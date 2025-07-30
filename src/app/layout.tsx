@@ -3,9 +3,8 @@ import type { Metadata } from 'next';
 
 import {
   BackgroundPanel,
+  DynamicComponents,
   FeedbackButton,
-  GlobalConfirmDialog,
-  Toaster,
 } from '@/shared/components';
 import { QueryProvider } from '@/shared/providers';
 
@@ -59,8 +58,7 @@ export default function RootLayout({
           <div className="mobile-container relative">
             <main className="h-full w-full">
               {children}
-              <Toaster />
-              <GlobalConfirmDialog />
+              <DynamicComponents />
             </main>
           </div>
         </QueryProvider>
