@@ -19,3 +19,4 @@ export * from './tab';
 export * from './loading-spinner';
 export * from './select';
 export * from './global-confirm-dialog';
+export * from './dynamic-components';
