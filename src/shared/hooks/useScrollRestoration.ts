@@ -1,5 +1,6 @@
 'use client';
 
+import throttle from 'lodash/throttle';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface UseScrollRestorationProps {
@@ -26,9 +27,11 @@ export function useScrollRestoration({
 
   const handleScroll = useCallback(
     (event: React.UIEvent<HTMLDivElement>) => {
-      const currentScrollY = event.currentTarget.scrollTop;
-      setPersistedScrollY(currentScrollY);
-      setShowScrollTopButton(currentScrollY > scrollTopThreshold);
+      throttle(() => {
+        const currentScrollY = event.currentTarget.scrollTop;
+        setPersistedScrollY(currentScrollY);
+        setShowScrollTopButton(currentScrollY > scrollTopThreshold);
+      }, 200)();
     },
     [setPersistedScrollY, scrollTopThreshold],
   );
